@@ -1,0 +1,144 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:ics.py - http://git.io/lLljaA
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250214
+DESCRIPTION:EARLY RELEASE \nOpción Plato Principal  \nVariedad de Pizzas  🍕\no\nPizza de Queso (V)🍕   ()\nAcompañantes\nZanahorias Tiernas & Dip  & \nEnsalada Mixta & Aderezo🥗  & \nDuraznos\n
+SUMMARY:DPS Almuerzo Menu
+UID:a4d5bd67-bca9-4dee-8374-269d01845ca9@a4d5.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250224
+DESCRIPTION:\nOpción Plato Principal  \nNachos de Pavo con Queso  🦃  \no\nQuesadilla de Queso (V)   ()\nAcompañantes\nFrijoles Negros \nMaíz Mexicali \nManzanas Especiadas \n
+SUMMARY:DPS Almuerzo Menu
+UID:e805f06b-bd4b-47cc-8dd6-f727fd8c4f6a@e805.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250210
+DESCRIPTION:\nOpción Plato Principal  \nNachos Pollo Cheesesteak  \no\nQuesadilla de Queso (V)   ()\nAcompañantes\nFrijoles Pintos \nMaíz Mexicali \nManzanas Especiadas \n
+SUMMARY:DPS Almuerzo Menu
+UID:97a4f417-ed19-46a5-b428-22f3ea43421d@97a4.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250217
+DESCRIPTION:\nNo Escuela \nDia de Trabajo Docente   🧑‍🏫\n
+SUMMARY:DPS Almuerzo Menu
+UID:00c2858b-5ef1-4e2a-afe8-669b6bf24fad@00c2.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250204
+DESCRIPTION:\nOpción Plato Principal  \nHamburguesa de Queso🍔  \no\nHamburguesa Vegetariana (V)🍔  ()\nAcompañantes\nPapas al Horno  \nFrijoles al Horno BBQ   \nCobbler de Durazno  \n
+SUMMARY:DPS Almuerzo Menu
+UID:6004dc33-7b08-4297-81e8-cd7586052589@6004.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250211
+DESCRIPTION:\nOpción Plato Principal  \nBistec con Salsa y Panecillo    \no\nPaquete de Bagel(V)📦  🥯()\nAcompañantes\nPapas Majadas \nZanahorias al Vapor  \nCobbler de Fresa  🍓\n
+SUMMARY:DPS Almuerzo Menu
+UID:39178d09-9842-4885-8a2f-e01fa005bffd@3917.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250226
+DESCRIPTION:\nOpción Plato Principal  \nTrozos de Pollo  \no\nTenders de Verduras (V)   ()\nAcompañantes\nPanecillo\nPapas al Horno  \nVerduras Verdes Sazonadas  \nFruta Fresca \n
+SUMMARY:DPS Almuerzo Menu
+UID:dcb0f7a8-569d-4334-bcc5-d43c259b9243@dcb0.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250228
+DESCRIPTION:\nOpción Plato Principal  \nVariedad de Pizzas  🍕\no\nPizza de Queso (V)🍕   ()\nAcompañantes\nZanahorias Tiernas & Dip  & \nEnsalada Mixta & Aderezo🥗  & \nDuraznos\n
+SUMMARY:DPS Almuerzo Menu
+UID:bfe4428a-cf73-4622-b00b-eb31a8431345@bfe4.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250219
+DESCRIPTION:\nOpción Plato Principal  \nPastel de Pollo & Pan🥧   & \no\nSándwich de Queso Tostado🥪   \n(V)()\nAcompañantes\nPapas Majadas \nFrijoles Verdes \nFruta Fresca \n
+SUMMARY:DPS Almuerzo Menu
+UID:a7541d4f-a722-4b8a-8633-34e04ac0af4b@a754.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250225
+DESCRIPTION:\nOpción Plato Principal  \nPollo BBQ & Panecillo  & \no\nPaquete de Bagel(V)📦  🥯()\nAcompañantes\nPapas Majadas \nFrijoles Verdes \nCobbler de Arándano  \n
+SUMMARY:DPS Almuerzo Menu
+UID:62c3eafb-6a88-415c-85b9-d85d9b68f633@62c3.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250213
+DESCRIPTION:\nOpción Plato Principal  \nTrozos de Pollo  \no\nRavioli de Queso (V)   ()\nAcompañantes\nPanecillo\nVerduras Verdes Sazonadas  \nPapas al Horno  \nPeras Frías \n
+SUMMARY:DPS Almuerzo Menu
+UID:5c54daa9-e236-4d63-9cd5-62f434ca5002@5c54.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250203
+DESCRIPTION:\nOpción Plato Principal  \nSándwich Filete de Pollo🥪   \no\nBocados Queso Mozarella  \n(V) & Marinara() & \nAcompañantes\nZanahorias al Vapor  \nMaíz al Vapor  \nManzanas Especiadas \n
+SUMMARY:DPS Almuerzo Menu
+UID:994956ef-e7e8-49c9-8283-c6fa13dae21c@9949.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250220
+DESCRIPTION:\nOpción Plato Principal  \nSub de Albóndigas  \no\nHummus + Flatbread (V) +  ()\nAcompañantes\nRodajas de Pepino & Salsa  🥒 & \nBrócoli al Vapor🥦  \nPeras Frías \n
+SUMMARY:DPS Almuerzo Menu
+UID:d942ec25-d949-46a6-80c5-f6f4c3f478fe@d942.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250218
+DESCRIPTION:\nOpción Plato Principal  \nSándwich Filete de Pollo🥪   \no\nHamburguesa Vegetariana🍔 \n(V)()\nAcompañantes\nWaffles de Batata Frita   \nVerduras Mixtas \nCobbler de Manzana  \n
+SUMMARY:DPS Almuerzo Menu
+UID:eff1ce8a-0898-4305-9cd3-5c2d3373ba19@eff1.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250221
+DESCRIPTION:\nOpción Plato Principal  \nVariedad de Pizzas  🍕\no\nPizza de Queso (V)🍕   ()\nAcompañantes\nZanahorias Tiernas & Dip  & \nEnsalada Mixta & Aderezo🥗  & \nDuraznos\n
+SUMMARY:DPS Almuerzo Menu
+UID:27f9c669-bd01-46c6-a305-77bf307ce506@27f9.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250205
+DESCRIPTION:\nOpción Plato Principal  \nEspaguetis Horneado con  \nPan de Ajo  🧄\no\nSándwich de Queso Tostado🥪   \n(V)()\nAcompañantes\nFrijoles Verdes \nBrócoli al Vapor🥦  \nFruta Fresca \n
+SUMMARY:DPS Almuerzo Menu
+UID:6a165a2f-6d0d-4ac7-8e37-e4f9444524e2@6a16.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250227
+DESCRIPTION:\nOpción Plato Principal  \nPollo Teriyaki \no\nEdamame al Vapor(V)  ()\nAcompañantes\nArroz Frito con Verduras   \nBrócoli al Vapor🥦  \nZanahorias Glaseadas \nPeras Frías \n
+SUMMARY:DPS Almuerzo Menu
+UID:ed40c868-ce3c-4217-938b-2a5518771e8a@ed40.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250207
+DESCRIPTION:\nOpción Plato Principal  \nVariedad de Pizzas  🍕\no\nPizza de Queso (V)🍕   ()\nAcompañantes\nZanahorias Tiernas & Dip  & \nEnsalada Mixta & Aderezo🥗  & \nDuraznos\n
+SUMMARY:DPS Almuerzo Menu
+UID:407872c9-983b-4ff0-9df5-4e2392c06af9@4078.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250212
+DESCRIPTION:\nOpción Plato Principal  \nDumplings de Pollo y🥟   \nVerdura en Salsa Teriyaki   \no\nTenders de Verduras (V) &   () &\nPanecillo\nAcompañantes\nBrócoli al Vapor🥦  \nHabas\nFruta Fresca \n
+SUMMARY:DPS Almuerzo Menu
+UID:5d0920c1-79a2-4d32-af55-a0900e251c97@5d09.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250206
+DESCRIPTION:\nOpción Plato Principal  \nNuggets de Corn dog   \no\nHummus + Pan Plano(V) +  ()\nAcompañantes\nWaffles de Batata Frita   \nRodajas de Pepino & Salsa  🥒 & \nPeras Frías \n
+SUMMARY:DPS Almuerzo Menu
+UID:01b07bb5-8884-4569-9ea0-13b25e3de399@01b0.org
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,144 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:ics.py - http://git.io/lLljaA
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250211
+DESCRIPTION:\nChoice of Entrée  \nBeef Steak w/Gravy & Roll  / & \nor\nBagel Snack Pack (V)🥯   ()\nOn the side  \nMashed Potatoes 🥔\nSavory Steamed Carrots  🥕\nStrawberry Cobbler🍓 \n
+SUMMARY:DPS Lunch Menu
+UID:2e164c5f-c3c0-41ff-9452-4ca32ccf9e1e@2e16.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250221
+DESCRIPTION:\nChoice of Entrée  \nAssorted Pizza Options 🍕 \nor\nCheese Pizza (V) 🍕 ()\nOn the side  \nBaby Carrots w/Dip👶 🥕 /\nTossed Salad w/Dressing  /\nPeaches🍑\n
+SUMMARY:DPS Lunch Menu
+UID:b876a364-4cac-4d30-b71d-3bdae2817d32@b876.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250206
+DESCRIPTION:\nChoice of Entrée  \nCorn Dog Nuggets 🐕 \nor\nHummus + Flatbread (V) + 🫓 ()\nOn the side  \nSweet Potato Waffle Fries 🥔 🧇 \nCucumber Slices w/Dip🥒  /\nChilled Pears 🍐\n
+SUMMARY:DPS Lunch Menu
+UID:eae728df-fd60-48f9-b774-05a6e8851efa@eae7.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250217
+DESCRIPTION:\nNo School 🏫\nTeacher Workday🧑‍🏫 \n
+SUMMARY:DPS Lunch Menu
+UID:201885a4-737c-44c0-9441-421f1a038567@2018.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250205
+DESCRIPTION:\nChoice of Entrée  \nBaked Spaghetti w/Garlic 🍝 /\nKnot🪢\nor\nToasted Cheese Sandwich  🥪\n(V)()\nOn the side  \nGreen Beans \nSteamed Broccoli 🥦\nFresh Fruit \n
+SUMMARY:DPS Lunch Menu
+UID:0ab14cfe-6bd0-4d74-a568-43859b70d1aa@0ab1.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250207
+DESCRIPTION:\nChoice of Entrée  \nAssorted Pizza Options 🍕 \nor\nCheese Pizza (V) 🍕 ()\nOn the side  \nBaby Carrots w/Dip👶 🥕 /\nTossed Salad w/Dressing  /\nPeaches🍑\n
+SUMMARY:DPS Lunch Menu
+UID:3eac422a-59ee-4248-9224-25c35363b389@3eac.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250203
+DESCRIPTION:\nChoice of Entrée  \nChicken Filet Sandwich🐔  🥪\nor\nMozzarella Cheese Bites (V)   ()\nw/Marinara/\nOn the side  \nSavory Steamed Carrots  🥕\nSteamed Corn \nSpiced Apples \n
+SUMMARY:DPS Lunch Menu
+UID:d86c414b-27df-4a5b-8793-b981a31f18ed@d86c.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250226
+DESCRIPTION:\nChoice of Entrée  \nChicken Chunks🐔 \nor\nVeggie Tenders (V)  ()\nOn the side  \nDinner Roll \nOven Potatoes 🥔\nSeasoned Greens \nFresh Fruit \n
+SUMMARY:DPS Lunch Menu
+UID:f5acbaed-cfc3-40da-80c1-a0b9761f7a41@f5ac.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250228
+DESCRIPTION:\nChoice of Entrée  \nAssorted Pizza Options 🍕 \nor\nCheese Pizza (V) 🍕 ()\nOn the side  \nBaby Carrots w/Dip👶 🥕 /\nTossed Salad w/Dressing  /\nPeaches🍑\n
+SUMMARY:DPS Lunch Menu
+UID:ce520f25-c873-446c-8c0b-fb8d1ca0cd15@ce52.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250212
+DESCRIPTION:\nChoice of Entrée  \nChicken & Vegetable🐔 & \nDumplings in Teriyaki Sauce🥟   \nor\nVeggie Tenders (V) w/Roll  () /\nOn the side  \nSteamed Broccoli 🥦\nLima Beans \nFresh Fruit \n
+SUMMARY:DPS Lunch Menu
+UID:7d531194-8d51-4b84-9f9c-4c3a6beefaca@7d53.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250220
+DESCRIPTION:\nChoice of Entrée  \nMeatball Sub \nor\nHummus + Flatbread (V) + 🫓 ()\nOn the side  \nCucumber Slices w/Dip🥒  /\nSteamed Broccoli 🥦\nChilled Pears 🍐\n
+SUMMARY:DPS Lunch Menu
+UID:81a29cb4-96da-4d91-8bf5-5b97d6f3a6c4@81a2.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250210
+DESCRIPTION:\nChoice of Entrée  \nChicken Cheesesteak🐔 \nNachos\nor\nCheese Quesadilla (V)  ()\nOn the side  \nPinto Beans \nMexicali Corn \nSpiced Apples \n
+SUMMARY:DPS Lunch Menu
+UID:57bd1808-13d2-46c7-9bf2-3af68cf1ee08@57bd.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250213
+DESCRIPTION:\nChoice of Entrée  \nChicken Chunks🐔 \nor\nCheesy Ravioli (V)  ()\nOn the side  \nDinner Roll \nSeasoned Greens \nOven Potatoes 🥔\nChilled Pears 🍐\n
+SUMMARY:DPS Lunch Menu
+UID:ba9837d1-0c39-4459-a50b-70ccdf6e1568@ba98.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250204
+DESCRIPTION:\nChoice of Entrée  \nCheeseburger on Bun  \nor\nVeggie Burger on Bun (V)    ()\nOn the side  \nOven Potatoes 🥔\nBBQ Baked Beans  \nPeach Cobbler🍑 \n
+SUMMARY:DPS Lunch Menu
+UID:9866e5a6-785e-4639-8e0a-2b8037446eb1@9866.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250214
+DESCRIPTION:EARLY RELEASE \nChoice of Entrée  \nAssorted Pizza Options 🍕 \nor\nCheese Pizza (V) 🍕 ()\nOn the side  \nBaby Carrots w/Dip👶 🥕 /\nTossed Salad w/Dressing  /\nPeaches🍑\n
+SUMMARY:DPS Lunch Menu
+UID:2cc8feb4-38b6-410a-8d98-b3254ff016dc@2cc8.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250227
+DESCRIPTION:\nChoice of Entrée  \nTeriyaki Chicken 🐔\nor\nSteamed Edamame (V)  ()\nOn the side  \nVegetable Fried Rice  \nSteamed Broccoli 🥦\nGlazed Carrots 🥕\nChilled Pears 🍐\n
+SUMMARY:DPS Lunch Menu
+UID:2a6a2ca4-fff3-4163-aa24-69396acd2268@2a6a.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250224
+DESCRIPTION:\nChoice of Entrée  \nTurkey Nachos w/Cheese🦃  /\nor\nCheese Quesadilla (V)  ()\nOn the side  \nBlack Beans \nMexicali Corn \nSpiced Apples \n
+SUMMARY:DPS Lunch Menu
+UID:483cc337-ffd3-471d-9a03-858589a1e93c@483c.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250225
+DESCRIPTION:\nChoice of Entrée  \nBarbecued Chicken w/Roll 🐔 /\nor\nBagel Snack Pack (V)🥯   ()\nOn the side  \nMashed Potatoes 🥔\nGreen Beans \nBlueberry Cobbler \n
+SUMMARY:DPS Lunch Menu
+UID:a64c1028-61f0-4bc6-819c-61d77bcdfb56@a64c.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250219
+DESCRIPTION:\nChoice of Entrée  \nChicken Pot Pie w/Roll🐔  🥧 /\nor\nToasted Cheese Sandwich  🥪\n(V)()\nOn the side  \nMashed Potatoes 🥔\nGreen Beans \nFresh Fruit \n
+SUMMARY:DPS Lunch Menu
+UID:37176dd4-b46b-456a-b7c7-fd10af94252e@3717.org
+END:VEVENT
+BEGIN:VEVENT
+TRANSP:TRANSPARENT
+DTSTART;VALUE=DATE:20250218
+DESCRIPTION:\nChoice of Entrée  \nChicken Filet Sandwich🐔  🥪\nor\nVeggie Burger on Bun (V)    ()\nOn the side  \nSweet Potato Waffle Fries 🥔 🧇 \nMixed Vegetables \nApple Cobbler \n
+SUMMARY:DPS Lunch Menu
+UID:0df04a83-e8ca-464e-bfd6-492b3b2a65b1@0df0.org
+END:VEVENT
+END:VCALENDAR
