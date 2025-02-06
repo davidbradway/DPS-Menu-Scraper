@@ -1,4 +1,8 @@
-## Critial Acclaim
+# DPS Menu Scraper
+
+Turn PDFs Lunch menus into Calendars.
+
+## Critical Acclaim
 
 > “Gods!! This calendar link is amazing! Thank you sooooooo much!!”
 
