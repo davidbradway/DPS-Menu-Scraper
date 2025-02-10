@@ -17,14 +17,13 @@ Original file is located at
 # Install packages and libraries
 !pip install pypdf ics
 !pip install emoji nltk
-!pip install beautifulsoup4 requests pytz
+!pip install beautifulsoup4 requests
 
 # prompt: use pydpf to read text from a pdf at a given url, parse the entries and create an ics-formatted text string for a calendar program import
 from urllib.request import urlopen
 from urllib.parse import urlparse, urlunparse, quote
 from io import BytesIO
 from pypdf import PdfReader
-from ics import Calendar, Event
 import ics
 from datetime import datetime
 import re
@@ -36,11 +35,8 @@ from nltk.stem import WordNetLemmatizer
 import requests
 from bs4 import BeautifulSoup
 
-# Create WordNetLemmatizer object
-wnl = WordNetLemmatizer()
 
-
-def get_all_links(url):
+def get_all_pdfs(url):
     try:
         # Send an HTTP GET request to the URL
         response = requests.get(url)
@@ -50,7 +46,8 @@ def get_all_links(url):
         soup = BeautifulSoup(response.text, 'html.parser')
         # Find all anchor tags and extract the href attribute
         links = [a.get('href') for a in soup.find_all('a', href=True)]
-        return links
+        pdf_files = list(set([file for file in links if file.endswith('.pdf')]))
+        return pdf_files
     except requests.exceptions.RequestException as e:
         print(f"Error fetching the URL: {e}")
         return []
@@ -79,64 +76,45 @@ def is_valid_date(date_string, language):
         pattern = r"^(Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre)\s+(\d{1,2})$"
     else:
         pattern = r"^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})$"
-
     match = re.match(pattern, date_string)
     if not match:
         return False
-
-    month_name = match.group(1)
-    day = int(match.group(2))
-
-    if language == 'es':
-        return True
     else:
-        try:
-            datetime.strptime(f"{month_name} {day}", "%B %d")
-            return True
-        except ValueError:
-            return False
+        return True
 
 
 def parse_date_string(date_string, language):
-    """Parses a date string into month, day, and year.
-
-    Args:
-      date_string: The date string to parse.  Must be in the format "Month Day".
-
-    Returns:
-      A tuple containing the month (string), day (int), and year (int).
-      Returns None if the date string is invalid.
-    """
+    """Parses a date string into year, month, day."""
     if language == 'es':
-        match = re.match(r"^(Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre)\s+(\d{1,2})$", date_string)
+        pattern = r"^(Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre)\s+(\d{1,2})$"
     else:
-        match = re.match(r"^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})$", date_string)
+        pattern = r"^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})$"
+    match = re.match(pattern, date_string)
     if not match:
         return None
     month_name = match.group(1)
     day = int(match.group(2))
 
     if language == 'es':
+        year = datetime.now().year
         # list of month names
         month_names = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
         month = month_names.index(month_name)+1
-        year = datetime.now().year
-        return month, day, year
+        return year, month, day
     elif language == 'en':
-        try:
-            date_obj = datetime.strptime(f"{month_name} {day}", "%B %d")
-            month = date_obj.strftime("%B")  # Get month name
-            day = date_obj.day
-            year = datetime.now().year
-            return month, day, year
-        except ValueError:
-            return None
+        year = datetime.now().year
+        month_names = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        month = month_names.index(month_name)+1
+        return year, month, day
     else:
         return None
 
 
 def text_to_ics(text, event_title, language):
-    calendar = Calendar()
+    # Create WordNetLemmatizer object
+    wnl = WordNetLemmatizer()
+
+    calendar = ics.Calendar()
     lines = text.split('\n')
     #print(lines)
     i=0
@@ -145,13 +123,10 @@ def text_to_ics(text, event_title, language):
         if is_valid_date(line.strip(), language):
             date_parts = parse_date_string(line.strip(), language)
             if date_parts is not None:
-                month, day, year = date_parts
-                event = Event()
+                year, month, day = date_parts
+                event = ics.Event()
                 event.name = event_title
-                if language == 'en':
-                    event.begin = datetime(year, datetime.strptime(month, "%B").month, day, tzinfo=pytz.utc) # set begin time
-                else:
-                    event.begin = datetime(year, month, day, tzinfo=pytz.utc) # set begin time
+                event.begin = datetime(year, month, day, tzinfo=pytz.utc) # set begin time
                 event.make_all_day()
                 extra_content = ics.utils.ContentLine(name="TRANSP", value="TRANSPARENT")
                 event.extra.append(extra_content)
@@ -159,15 +134,20 @@ def text_to_ics(text, event_title, language):
                 event.description = ''
                 while i + 1 < len(lines) and not is_valid_date(lines[i + 1].strip(), language) and "Prices" not in lines[i + 1] and "Precios" not in lines[i + 1]:
                     next_line = lines[i + 1].strip()
-                    nocolons_next_line: str = re.sub(r':', r'', next_line)
-                    low = nocolons_next_line.lower()
-                    lemmatized_string = ' '.join([wnl.lemmatize(words) for words in low.split()])
-                    colons: str = re.sub(r'(\w*)', r':\1:', lemmatized_string)
-                    line = nocolons_next_line + colons
+                    next_line_no_colons: str = re.sub(r':', r'', next_line)
+                    next_line_no_colons_low = next_line_no_colons.lower()
+                    lemmatized_string = ' '.join([wnl.lemmatize(words) for words in next_line_no_colons_low.split()])
+                    with_colons: str = re.sub(r'(\w*)', r':\1:', lemmatized_string)
+                    if language == 'es':
+                        with_emojis: str = emoji.emojize(string=with_colons, language=language)
+                    elif language == 'en':
+                        with_emojis: str = emoji.emojize(string=with_colons, language='alias')
+                    else:
+                        return None
+                    only_emoji: str = ''.join([c for c in with_emojis if c in emoji.EMOJI_DATA])
+                    line = next_line_no_colons + only_emoji
                     #print(line)
-                    with_emojis: str = emoji.emojize(string=line, language=language)
-                    nocolons: str = re.sub(r':(\w*):', r'', with_emojis)
-                    event.description += nocolons + '\n'
+                    event.description += line + '\n'
                     i += 1
                 calendar.events.add(event)
         else:
@@ -176,16 +156,11 @@ def text_to_ics(text, event_title, language):
 
 
 def to_file(ics_string, filename):
+    # Save to file:
     if ics_string:
-        # To save to file:
         with open(filename, "w", newline='', encoding='utf-8') as f:
             f.write(ics_string)
 
-# Now we find the menu from the site
-url = 'https://www.dpsnc.net/Page/7089'
-baseUrl = 'https://www.dpsnc.net'
-all_links = get_all_links(url)
-pdf_files = [file for file in all_links if file.endswith('.pdf')]
 
 def wrap(baseUrl, pdf_files, language):
     if 'en' in language:
@@ -198,7 +173,6 @@ def wrap(baseUrl, pdf_files, language):
         outfile = 'espanol.ics'
     else:
         return False
-
     link = baseUrl + relative_url[0][5:].replace(" ", "%20")
     #print(link)
     text = url_to_text(link)
@@ -207,13 +181,16 @@ def wrap(baseUrl, pdf_files, language):
     ics_string = cal.serialize()
     #print(ics_string)
     to_file(ics_string, outfile)
-
     return True
 
+# Now we find the menu from the site
+url = 'https://www.dpsnc.net/Page/7089'
+baseUrl = 'https://www.dpsnc.net'
+pdf_files = get_all_pdfs(url)
+pdf_files
+
 # English code here
-language = 'en'
-wrap(baseUrl, pdf_files, language)
+wrap(baseUrl, pdf_files, language:='en')
 
 # Spanish code here
-language = 'es'
-wrap(baseUrl, pdf_files, language)
+wrap(baseUrl, pdf_files, language:='es')
