@@ -25,3 +25,5 @@ Turn PDFs Lunch menus into Calendars.
 > “This is awesome. Thanks!”
 
 > “Those are serious superpowers, David! awesome!”
+
+> “This is fantastic! My son asks about the menu every morning and I love having it on my calendar.”
