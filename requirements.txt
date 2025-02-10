@@ -4,4 +4,3 @@ emoji
 nltk
 beautifulsoup4
 requests
-pytz
