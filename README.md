@@ -4,8 +4,14 @@ Turn PDFs Lunch menus into Calendars.
 
 ## Usage
 
+One-time setup:
 ```bash
 pip install -r requirements.txt
+python setup.py
+```
+
+To (re-)generate calendar menus:
+```bash
 python pdf_2_ics.py
 ```
 

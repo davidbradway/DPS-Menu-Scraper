@@ -22,14 +22,11 @@ from urllib.request import urlopen
 
 import emoji
 import ics
-import nltk
 import pytz
 import requests
 from bs4 import BeautifulSoup
 from nltk.stem import WordNetLemmatizer
 from pypdf import PdfReader
-
-nltk.download("wordnet")
 
 
 def get_all_pdfs(url):
