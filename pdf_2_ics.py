@@ -15,21 +15,21 @@ Original file is located at
 # Also perhaps for a new calendar month format or for a menu type
 
 # prompt: use pydpf to read text from a pdf at a given url, parse the entries and create an ics-formatted text string for a calendar program import
-from urllib.request import urlopen
-from urllib.parse import urlparse, urlunparse, quote
-from io import BytesIO
-from pypdf import PdfReader
-import ics
-from datetime import datetime
 import re
-import pytz
-import emoji
-import nltk
+from datetime import datetime
+from io import BytesIO
+from urllib.request import urlopen
 
-nltk.download("wordnet")
-from nltk.stem import WordNetLemmatizer
+import emoji
+import ics
+import nltk
+import pytz
 import requests
 from bs4 import BeautifulSoup
+from nltk.stem import WordNetLemmatizer
+from pypdf import PdfReader
+
+nltk.download("wordnet")
 
 
 def get_all_pdfs(url):
