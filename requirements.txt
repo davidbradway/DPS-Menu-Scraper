@@ -1,0 +1,6 @@
+pypdf
+ics
+emoji
+nltk
+beautifulsoup4
+requests
