@@ -175,27 +175,34 @@ def to_file(ics_string, filename):
             f.write(ics_string)
 
 
-def wrap(pdf_files, language):
+def generate_ics(pdf_files, level, language):
+    level_terms_en = {
+        "elementary": "Elementary",
+        "middle": "Middle",
+        "high": "High",
+    }
+    level_terms_es = {
+        "elementary": "Elemental",
+        "middle": "Intermedia",
+        "high": "Secundaria",
+    }
+    level_codes = {"elementary": "ES", "middle": "MS", "high": "HS"}
     if "en" in language:
         url = [
             file
             for file in pdf_files
-            if "ES" in file and "Lunch" in file and "Spanish" not in file
+            if level_codes[level] in file and "Lunch" in file and "Spanish" not in file
         ]
-        event_title = (
-            "DPS Lunch Menu"  # All events in the calendar will have this title
-        )
-        outfile = "english.ics"
+        event_title = f"DPS - {level_terms_en[level]} School Lunch Menu"  # All events in the calendar will have this title
+        outfile = f"english_{level}.ics"
     elif "es" in language:
         url = [
             file
             for file in pdf_files
-            if "ES" in file and "Lunch" in file and "Spanish" in file
+            if level_codes[level] in file and "Lunch" in file and "Spanish" in file
         ]
-        event_title = (
-            "DPS Almuerzo Menu"  # All events in the calendar will have this title
-        )
-        outfile = "espanol.ics"
+        event_title = f"DPS - Menú Almuerzo Escuela {level_terms_es[level]}"  # All events in the calendar will have this title
+        outfile = f"spanish_{level}.ics"
     else:
         return False
     link = url[0].replace(" ", "%20")
@@ -214,8 +221,9 @@ url = "https://www.dpsnc.net/Page/7089"
 pdf_files = get_all_pdfs(url)
 # print(pdf_files)
 
-# English code here
-wrap(pdf_files, language="en")
-
-# Spanish code here
-wrap(pdf_files, language="es")
+generate_ics(pdf_files, level="elementary", language="en")
+generate_ics(pdf_files, level="elementary", language="es")
+generate_ics(pdf_files, level="middle", language="en")
+generate_ics(pdf_files, level="middle", language="es")
+generate_ics(pdf_files, level="high", language="en")
+generate_ics(pdf_files, level="high", language="es")
