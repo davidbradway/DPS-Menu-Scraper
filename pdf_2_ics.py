@@ -175,37 +175,48 @@ def to_file(ics_string, filename):
             f.write(ics_string)
 
 
-def generate_ics(pdf_files, level, language):
+def generate_ics(pdf_filename, level, language, meal="lunch"):
+    meal_terms_en = {
+        "breakfast": "Breakfast",
+        "lunch": "Lunch",
+        "afterschoolsnack": "Afterschool Snack",
+        "snack": "Snack",
+    }
+    meal_terms_es = {
+        "breakfast": "Desayuno",
+        "lunch": "Almuerzo",
+        "afterschoolsnack": "Meriendas Después de Clases",
+        "snack": "Merienda En la Escuela",
+    }
+    meal_codes = {"breakfast": "Breakfast", "lunch": "Lunch", "afterschoolsnack": "ASSP", "snack": "Snack"}
+
     level_terms_en = {
+        "k12": "K12",
         "elementary": "Elementary",
         "middle": "Middle",
         "high": "High",
+        "bic": "Breakfast in Classroom",
+        "prek": "PreK",
     }
     level_terms_es = {
+        "k12": "K12",
         "elementary": "Elemental",
         "middle": "Intermedia",
         "high": "Secundaria",
+        "bic": "Desayuno en el Aula",
+        "prek": "PreK",
     }
-    level_codes = {"elementary": "ES", "middle": "MS", "high": "HS"}
+    level_codes = {"k12": "K12", "elementary": "ES", "middle": "MS", "high": "HS", "bic": "BIC", "prek": "PreK"}
+
     if "en" in language:
-        url = [
-            file
-            for file in pdf_files
-            if level_codes[level] in file and "Lunch" in file and "Spanish" not in file
-        ]
-        event_title = f"DPS - {level_terms_en[level]} School Lunch Menu"  # All events in the calendar will have this title
-        outfile = f"english_{level}.ics"
+        event_title = f"DPS - {level_terms_en[level]} School {meal_terms_en[meal]} Menu"  # All events in the calendar will have this title
+        outfile = f"english_{level}_{meal}.ics"
     elif "es" in language:
-        url = [
-            file
-            for file in pdf_files
-            if level_codes[level] in file and "Lunch" in file and "Spanish" in file
-        ]
-        event_title = f"DPS - Menú Almuerzo Escuela {level_terms_es[level]}"  # All events in the calendar will have this title
-        outfile = f"spanish_{level}.ics"
+        event_title = f"DPS - Menú {meal_terms_es[meal]} Escuela {level_terms_es[level]}"  # All events in the calendar will have this title
+        outfile = f"spanish_{level}_{meal}.ics"
     else:
         return False
-    link = url[0].replace(" ", "%20")
+    link = pdf_filename.replace(" ", "%20")
     # print(link)
     text = url_to_text(link)
     # print(text)
@@ -216,14 +227,48 @@ def generate_ics(pdf_files, level, language):
     return True
 
 
-# Now we find the menu from the site
-url = "https://www.dpsnc.net/Page/7089"
-pdf_files = get_all_pdfs(url)
-# print(pdf_files)
+def parse_filename(filename):
+    if "Carb" in filename:
+        return False
+    if "Achievement" in filename:
+        return False
 
-generate_ics(pdf_files, level="elementary", language="en")
-generate_ics(pdf_files, level="elementary", language="es")
-generate_ics(pdf_files, level="middle", language="en")
-generate_ics(pdf_files, level="middle", language="es")
-generate_ics(pdf_files, level="high", language="en")
-generate_ics(pdf_files, level="high", language="es")
+    if "K12" in filename:
+        level = "k12"
+    elif "ES" in filename:
+        level = "elementary"
+    elif "MS" in filename:
+        level = "middle"
+    elif "HS" in filename:
+        level = "high"
+    elif "BIC" in filename:
+        level = "bic"
+    elif "PreK" in filename:
+        level = "prek"
+    else:
+        return False
+
+    if "Spanish" in filename:
+        language = "es"
+    else:
+        language = "en"
+
+    if "Breakfast" in filename:
+        meal = "breakfast"
+    elif "Lunch" in filename:
+        meal = "lunch"
+    elif "ASSP" in filename:
+        meal = "afterschoolsnack"
+    elif "Snack" in filename:
+        meal = "snack"
+    else:
+        return False
+    return (level, language, meal)
+
+
+pdf_files = get_all_pdfs("https://www.dpsnc.net/Page/7089")
+for filename in pdf_files:
+    params = parse_filename(filename)
+    if params:
+        (level, language, meal) = params
+        generate_ics(filename, level, language, meal)
