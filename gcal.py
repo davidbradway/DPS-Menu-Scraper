@@ -77,7 +77,8 @@ def main():
       # replace this with the proper date from menu
       today = date.today()
       tomorrow = today + timedelta(days=1)
-      tomorroww_format = tomorrow.strftime("%Y-%m-%d")
+      tomorrow_format = tomorrow.strftime("%Y-%m-%d")
+
 
       new_event = {
         'summary': 'Test',
