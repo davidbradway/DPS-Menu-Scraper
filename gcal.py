@@ -93,9 +93,6 @@ def main():
       new_event = service.events().insert(calendarId=value, body=new_event).execute()
       print('Event created: %s' % (new_event.get('htmlLink')))
 
-  except HttpError as error:
-    print(f"An error occurred: {error}")
-
 
 if __name__ == "__main__":
   main()
