@@ -1,4 +1,5 @@
 import datetime
+from datetime import date, timedelta
 import os.path
 import json
 
@@ -9,7 +10,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
+SCOPES = ["https://www.googleapis.com/auth/calendar.events"]
 
 
 def main():
@@ -29,7 +30,7 @@ def main():
       creds.refresh(Request())
     else:
       flow = InstalledAppFlow.from_client_secrets_file(
-          "credentials.json", SCOPES
+        "credentials.json", SCOPES
       )
       creds = flow.run_local_server(
         host='localhost',
@@ -73,28 +74,23 @@ def main():
     for key, value in cal_list.items():
       print(f"{key}: {value}")
 
-      now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
-      events_result = (
-          service.events()
-          .list(
-              calendarId=value,
-              timeMin=now,
-              maxResults=1,
-              singleEvents=True,
-              orderBy="startTime",
-          )
-          .execute()
-      )
-      events = events_result.get("items", [])
+      # replace this with the proper date from menu
+      today = date.today()
+      tomorrow = today + timedelta(days=1)
+      tomorroww_format = tomorrow.strftime("%Y-%m-%d")
 
-      if not events:
-        print("No upcoming events found.")
-        return
-
-      # Prints the start and name
-      for event in events:
-        start = event["start"].get("dateTime", event["start"].get("date"))
-        print(">", start, event["summary"])
+      new_event = {
+        'summary': 'Test',
+        'description': 'Delete me.',
+        'start': {
+          'date': tomorroww_format,
+        },
+        'end': {
+          'date': tomorroww_format,
+        },
+      }
+      new_event = service.events().insert(calendarId=value, body=new_event).execute()
+      print('Event created: %s' % (new_event.get('htmlLink')))
 
   except HttpError as error:
     print(f"An error occurred: {error}")
