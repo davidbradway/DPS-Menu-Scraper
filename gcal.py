@@ -15,7 +15,7 @@ SCOPES = ["https://www.googleapis.com/auth/calendar.events"]
 
 def main():
   """Shows basic usage of the Google Calendar API.
-  Prints the start and name of the next event from each calendar
+  Adds an event to each calendar
   of a user in which "DPS" appears in the calendar name.
   """
   creds = None
