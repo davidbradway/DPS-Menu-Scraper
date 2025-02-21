@@ -142,6 +142,8 @@ def text_to_ics(text, event_title, language):
             and not is_valid_date(lines[i + 1].strip(), language)
             and "Prices" not in lines[i + 1]
             and "Precios" not in lines[i + 1]
+            and "ambios" not in lines[i + 1]
+            and "change" not in lines[i + 1]
         ):
             next_line = lines[i + 1].strip()
             line = add_emojis(next_line, language, wnl)
