@@ -42,56 +42,55 @@ def main():
     with open("token.json", "w") as token:
       token.write(creds.to_json())
 
-  try:
-    service = build("calendar", "v3", credentials=creds)
+  service = build("calendar", "v3", credentials=creds)
 
-    # If we already saved the list of calendar IDs, load them.
-    if os.path.exists("cal_list.json"):
-      # Open the JSON file
-      with open("cal_list.json") as f:
-        cal_list = json.load(f)
-    else:
-      # Call the Calendar API to get the list of calendar names and IDs
-      page_token = None
-      cal_list = {}
-      while True:
-        calendar_list = service.calendarList().list(pageToken=page_token).execute()
-        for calendar_list_entry in calendar_list['items']:
-          print(f"{calendar_list_entry['id']} {calendar_list_entry['summary']}")
-          # Add to dictionary if contains "DPS"
-          if "DPS" in calendar_list_entry['summary']:
-            cal_list[calendar_list_entry['summary']] = calendar_list_entry['id']
-        page_token = calendar_list.get('nextPageToken')
-        if not page_token:
-          break
+  # If we already saved the list of calendar IDs, load them.
+  if os.path.exists("cal_list.json"):
+    # Open the JSON file
+    with open("cal_list.json") as f:
+      cal_list = json.load(f)
+  else:
+    # Call the Calendar API to get the list of calendar names and IDs
+    page_token = None
+    cal_list = {}
+    while True:
+      calendar_list = service.calendarList().list(pageToken=page_token).execute()
+      for calendar_list_entry in calendar_list['items']:
+        print(f"{calendar_list_entry['id']} {calendar_list_entry['summary']}")
+        # Add to dictionary if contains "DPS"
+        if "DPS" in calendar_list_entry['summary']:
+          cal_list[calendar_list_entry['summary']] = calendar_list_entry['id']
+      page_token = calendar_list.get('nextPageToken')
+      if not page_token:
+        break
 
-      # Convert and write JSON object to file
-      with open("cal_list.json", "w") as outfile: 
-        json.dump(cal_list, outfile)
+    # Convert and write JSON object to file
+    with open("cal_list.json", "w") as outfile: 
+      json.dump(cal_list, outfile)
 
-    # Print the data (it will be stored as a Python dictionary)
-    # iterating both key and values
-    for key, value in cal_list.items():
-      print(f"{key}: {value}")
+  # Print the data (it will be stored as a Python dictionary)
+  # iterating both key and values
+  for key, value in cal_list.items():
+    print(f"{key}: {value}")
 
-      # replace this with the proper date from menu
-      today = date.today()
-      tomorrow = today + timedelta(days=1)
-      tomorrow_format = tomorrow.strftime("%Y-%m-%d")
+    # replace this with the proper date from menu
+    today = date.today()
+    tomorrow = today + timedelta(days=1)
+    tomorrow_format = tomorrow.strftime("%Y-%m-%d")
 
 
-      new_event = {
-        'summary': 'Test',
-        'description': 'Delete me.',
-        'start': {
-          'date': tomorroww_format,
-        },
-        'end': {
-          'date': tomorroww_format,
-        },
-      }
-      new_event = service.events().insert(calendarId=value, body=new_event).execute()
-      print('Event created: %s' % (new_event.get('htmlLink')))
+    new_event = {
+      'summary': 'Test',
+      'description': 'Delete me.',
+      'start': {
+        'date': tomorroww_format,
+      },
+      'end': {
+        'date': tomorroww_format,
+      },
+    }
+    new_event = service.events().insert(calendarId=value, body=new_event).execute()
+    print('Event created: %s' % (new_event.get('htmlLink')))
 
 
 if __name__ == "__main__":
