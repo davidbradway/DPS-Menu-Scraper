@@ -3,7 +3,7 @@ name: deploy
 on:
   schedule:
     # - cron: '30 5 1 * *'  # the first day of every month at 5:30 UTC
-    - cron: '00 14 21 2 *'  # the 21st day of Feb at 14:00 UTC / 9:00 EST
+    - cron: '00 01 22 2 *'  #
 
 jobs:
   create_ics:
