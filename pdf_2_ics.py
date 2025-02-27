@@ -250,9 +250,10 @@ def parse_filename(filename):
     return (level, language, meal)
 
 
-pdf_files = get_all_pdfs("https://www.dpsnc.net/Page/7089")
-for filename in pdf_files:
-    params = parse_filename(filename)
-    if params:
-        (level, language, meal) = params
-        generate_ics(filename, level, language, meal)
+if __name__ == "__main__":
+    pdf_files = get_all_pdfs("https://www.dpsnc.net/Page/7089")
+    for filename in pdf_files:
+        params = parse_filename(filename)
+        if params:
+            (level, language, meal) = params
+            generate_ics(filename, level, language, meal)
