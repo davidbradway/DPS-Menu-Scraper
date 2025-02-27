@@ -128,5 +128,5 @@ def test_date(service, cal_id, verbose):
 if __name__ == '__main__':
     service = get_calendar_service()
     #cal_id = menu_ids[file_info.filename]
-    #iterate_cal(service, 'english_elementary_lunch.ics', 'primary', True)
+    #iterate_cal(service, 'primary', 'english_elementary_lunch.ics', True)
     test_date(service, 'primary', True)
