@@ -1,5 +1,6 @@
 pypdf
 ics
+pytz
 emoji
 nltk
 beautifulsoup4
