@@ -4,6 +4,7 @@ import zipfile
 import os
 import os.path
 import json
+import pytz
 
 from ics import Calendar
 
@@ -60,9 +61,12 @@ def search_events_by_date(service, cal_id, date_str):
   Returns:
     A list of events for the given date, or an empty list if no events are found.
   """
+  tz_UTC = pytz.timezone('UTC') 
   date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
-  start_of_day = datetime.datetime.combine(date_obj, datetime.time.min).isoformat() + 'Z'
-  end_of_day = datetime.datetime.combine(date_obj, datetime.time.max).isoformat() + 'Z'
+  start_of_day = (datetime.datetime(date_obj.year, date_obj.month, date_obj.day, 00, 00, 00)
+          ).astimezone(tz_UTC).isoformat().removesuffix("+00:00")+'Z'
+  end_of_day = (datetime.datetime(date_obj.year, date_obj.month, date_obj.day, 23, 59, 59)
+          ).astimezone(tz_UTC).isoformat().removesuffix("+00:00")+'Z'
 
   events_result = service.events().list(calendarId=cal_id, timeMin=start_of_day,
                                         timeMax=end_of_day, singleEvents=True,
