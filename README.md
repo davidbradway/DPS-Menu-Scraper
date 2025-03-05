@@ -15,6 +15,11 @@ To (re-)generate calendar menus:
 python pdf_2_ics.py
 ```
 
+To post events to calendars (if you have write access):
+```bash
+python gcal.py
+```
+
 This has been tested with Python 3.11.11 and the following library versions:
 
 ```
