@@ -74,9 +74,8 @@ def search_events_by_date(service, cal_id, date_str):
   events = events_result.get('items', [])
   return events
 
-def process_zip(zip_filepath):
-  """Opens a downloaded ZIP file and processes ICS files within."""
 
+def load_resources():
   # We need a list of filenames and calendar IDs, load them.
   if os.path.exists("menu_ids.json"):
     with open("menu_ids.json") as f:
@@ -108,29 +107,67 @@ def process_zip(zip_filepath):
       # Convert and write JSON object to file
       with open("cal_list.json", "w") as outfile: 
         json.dump(cal_list, outfile)
+    return (menu_ids, service)
+  else:
+    return None
 
-    # For each file in the ZIP, iterate through the events and add them to the
-    # calendar with the ID that matches from the menu_id.json lookup file
-    with zipfile.ZipFile(zip_filepath, 'r') as zip_ref:
-      for file_info in zip_ref.infolist():
-        if file_info.filename in menu_ids and menu_ids[file_info.filename] != '':
-          with zip_ref.open(file_info) as file:
-            content = file.read().decode('utf-8') # Decode assuming UTF-8
-            calendar = Calendar(content)
-            for event in calendar.events:
-              date_to_search = event.begin.strftime("%Y-%m-%d")
-              # check for existing events on the date we are considering
-              events_on_date = search_events_by_date(service, menu_ids[file_info.filename], date_to_search)
-              if not events_on_date:
-                new_event = {
-                  'summary': event.name,
-                  'description': event.description,
-                  'start': {'date': event.begin.strftime("%Y-%m-%d")},
-                  'end': {'date': event.end.strftime("%Y-%m-%d")}
-                }
-                # Uncomment these when we are ready to push to the cals
-                new_event = service.events().insert(calendarId=menu_ids[file_info.filename], body=new_event).execute()
-                print('Event created: %s' % (new_event.get('htmlLink')))
+
+def process_zip(menu_ids, service, zip_filepath):
+  """Opens a downloaded ZIP file and processes ICS files within."""
+  # For each file in the ZIP, iterate through the events and add them to the
+  # calendar with the ID that matches from the menu_id.json lookup file
+  with zipfile.ZipFile(zip_filepath, 'r') as zip_ref:
+    for file_info in zip_ref.infolist():
+      if file_info.filename in menu_ids and menu_ids[file_info.filename] != '':
+        with zip_ref.open(file_info) as file:
+          content = file.read().decode('utf-8') # Decode assuming UTF-8
+          calendar = Calendar(content)
+          for event in calendar.events:
+            date_to_search = event.begin.strftime("%Y-%m-%d")
+            # check for existing events on the date we are considering
+            events_on_date = search_events_by_date(service, menu_ids[file_info.filename], date_to_search)
+            new_event = {
+              'summary': event.name,
+              'description': event.description,
+              'start': {'date': event.begin.strftime("%Y-%m-%d")},
+              'end': {'date': event.end.strftime("%Y-%m-%d")}
+            }
+            if not events_on_date:
+              # print(new_event)
+              # Uncomment these when we are ready to push to the cals
+              new_event = service.events().insert(calendarId=menu_ids[file_info.filename], body=new_event).execute()
+              print('Event created: %s' % (new_event.get('htmlLink')))
+
+
+def process_dir(menu_ids, service):
+  """Reads contents of current directory and processes ICS files within."""
+  dirlist = list(filter(lambda x: x.endswith('.ics'), os.listdir()))
+  for filename in dirlist:
+    if filename in menu_ids and menu_ids[filename] != '':
+      with open(filename, 'r', encoding='utf-8') as file:
+        content = file.read()
+        calendar = Calendar(content)
+        for event in calendar.events:
+          date_to_search = event.begin.strftime("%Y-%m-%d")
+          # check for existing events on the date we are considering
+          events_on_date = search_events_by_date(service, menu_ids[filename], date_to_search)
+          new_event = {
+            'summary': event.name,
+            'description': event.description,
+            'start': {'date': event.begin.strftime("%Y-%m-%d")},
+            'end': {'date': event.end.strftime("%Y-%m-%d")}
+          }
+          if not events_on_date:
+            # print(new_event)
+            # Uncomment these when we are ready to push to the cals
+            new_event = service.events().insert(calendarId=menu_ids[filename], body=new_event).execute()
+            print('Event created: %s' % (new_event.get('htmlLink')))
+
 
 if __name__ == "__main__":
-  process_zip("calendars.zip")
+  (menu_ids, service) = load_resources()
+  zip_filepath = "calendars.zip"
+  if os.path.exists(zip_filepath):
+    process_zip(menu_ids, service, zip_filepath)
+  else:
+    process_dir(menu_ids, service)
