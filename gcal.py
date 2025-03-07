@@ -1,3 +1,17 @@
+'''
+This script interacts with the Google Calendar API to upload events from ICS files.
+It supports both processing individual ICS files in a directory and processing ICS files within a ZIP archive.
+Functions:
+- authenticate(): Authenticates the user with Google OAuth2 and returns the credentials.
+- get_calendar_service(): Returns the Google Calendar API service object.
+- search_events_by_date(service, cal_id, date_str): Searches for events on a given date in a specified calendar.
+- load_resources(): Loads the necessary resources such as calendar IDs and initializes the Google Calendar service.
+- process_zip(menu_ids, service, zip_filepath): Processes ICS files within a ZIP archive and uploads events to Google Calendar.
+- process_dir(menu_ids, service): Processes ICS files in the current directory and uploads events to Google Calendar.
+Usage:
+- Ensure you have 'credentials.json' for Google OAuth2 and 'menu_ids.json' for mapping filenames to calendar IDs.
+- Run the script. It will either process a ZIP file named 'calendars.zip' or process individual ICS files in the current directory.
+'''
 import datetime
 from datetime import date, timedelta, timezone
 import zipfile
@@ -19,6 +33,21 @@ SCOPES = ["https://www.googleapis.com/auth/calendar.events"]
 
 
 def authenticate():
+  """
+  Authenticates the user with Google API and returns the credentials.
+
+  This function handles the OAuth2 authentication flow for accessing Google APIs.
+  It checks for existing credentials in the 'token.json' file. If valid credentials
+  are found, they are used. If the credentials are expired, they are refreshed.
+  If no valid credentials are found, the user is prompted to log in via a local
+  server.
+
+  Returns:
+    google.oauth2.credentials.Credentials: The authenticated user's credentials.
+
+  Raises:
+    google.auth.exceptions.GoogleAuthError: If there is an error during the authentication process.
+  """
   creds = None
   # The file token.json stores the user's access and refresh tokens, and is
   # created automatically when authorization flow completes
@@ -45,13 +74,25 @@ def authenticate():
 
 
 def get_calendar_service():
+  """
+  Authenticates and returns a Google Calendar service object.
+
+  This function uses the `authenticate` function to obtain the necessary
+  credentials and then builds a Google Calendar service object using the
+  Google API client library.
+
+  Returns:
+    googleapiclient.discovery.Resource: A Google Calendar service object
+    that can be used to interact with the Google Calendar API.
+  """
   creds = authenticate()
   service = build('calendar', 'v3', credentials=creds)
   return service
 
 
 def search_events_by_date(service, cal_id, date_str):
-  """Searches for events on a given date.
+  """
+  Searches for events on a given date.
 
   Args:
     service: The Google Calendar API service object.
@@ -76,6 +117,16 @@ def search_events_by_date(service, cal_id, date_str):
 
 
 def load_resources():
+  """
+  Load resources required for the application.
+  This function performs the following tasks:
+  1. Checks if the "menu_ids.json" file exists and loads it.
+  2. Initializes the Google Calendar service.
+  3. Checks if the "cal_list.json" file exists and loads it. If not, it fetches the list of calendar names and IDs from the Google Calendar API, filters them by those containing "DPS" in their summary, and saves the list to "cal_list.json".
+  Returns:
+    tuple: A tuple containing the loaded menu IDs and the Google Calendar service object if "menu_ids.json" exists.
+    None: If "menu_ids.json" does not exist.
+  """
   # We need a list of filenames and calendar IDs, load them.
   if os.path.exists("menu_ids.json"):
     with open("menu_ids.json") as f:
@@ -113,7 +164,16 @@ def load_resources():
 
 
 def process_zip(menu_ids, service, zip_filepath):
-  """Opens a downloaded ZIP file and processes ICS files within."""
+  """
+  Opens a downloaded ZIP file and processes ICS files within.
+  Args:
+    menu_ids (dict): A dictionary mapping filenames to calendar IDs.
+    service (googleapiclient.discovery.Resource): The Google Calendar API service instance.
+    zip_filepath (str): The file path to the ZIP file containing ICS files.
+  Raises:
+    zipfile.BadZipFile: If the ZIP file is corrupt or not a ZIP file.
+    UnicodeDecodeError: If the ICS file content cannot be decoded as UTF-8.
+  """
   # For each file in the ZIP, iterate through the events and add them to the
   # calendar with the ID that matches from the menu_id.json lookup file
   with zipfile.ZipFile(zip_filepath, 'r') as zip_ref:
@@ -140,7 +200,18 @@ def process_zip(menu_ids, service, zip_filepath):
 
 
 def process_dir(menu_ids, service):
-  """Reads contents of current directory and processes ICS files within."""
+  """
+  Reads contents of the current directory and processes ICS files within.
+  This function filters finds all files in the current directory that have a '.ics' extension.
+  For each ICS file, it reads the file content, parses it as a calendar, and processes each event.
+  If the event date does not already have an event in the specified Google Calendar, it creates a new event.
+  Args:
+    menu_ids (dict): A dictionary where keys are filenames and values are Google Calendar IDs.
+             Only files with non-empty calendar IDs are processed.
+    service (googleapiclient.discovery.Resource): The Google Calendar API service instance used to interact with the calendar.
+  Returns:
+    None
+  """
   dirlist = list(filter(lambda x: x.endswith('.ics'), os.listdir()))
   for filename in dirlist:
     if filename in menu_ids and menu_ids[filename] != '':
