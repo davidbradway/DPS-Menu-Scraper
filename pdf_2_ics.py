@@ -1,4 +1,27 @@
 # -*- coding: utf-8 -*-
+'''
+This script retrieves links to PDF and DOCX files from a specified URL, extracts text content from these files, 
+and generates ICS (iCalendar) files based on the extracted text. The script is designed to process school menu 
+documents and convert them into calendar events.
+Functions:
+    get_all_links(url):
+    get_unique(url, links):
+    get_all_pdfs(url, links):
+    get_all_docs(url, links):
+    url_to_text(url):
+    is_valid_date(date_string, language):
+        Checks if the input string is a valid date in the format "Month Day".
+    parse_date_string(date_string, language):
+    add_emojis(next_line, language, wnl):
+    text_to_ics(text, event_title, language, day_language):
+    to_file(ics_string, filename):
+    generate_ics(pdf_filename, level, language, day_language, meal):
+    parse_filename(filename):
+Main Execution:
+    The script retrieves links from a specified URL, processes DOCX and PDF files to extract text content, 
+    and generates ICS files based on the extracted text. The generated ICS files contain calendar events 
+    for school menus, with event titles and descriptions based on the content of the documents.
+'''
 import re
 from datetime import datetime, timezone
 from io import BytesIO
@@ -15,6 +38,18 @@ import docx
 
 
 def get_all_links(url):
+    """
+    Retrieve all hyperlinks from a given URL.
+    This function sends an HTTP GET request to the specified URL, parses the HTML content,
+    and extracts all hyperlinks (anchor tags with href attributes).
+    Args:
+        url (str): The URL of the webpage to retrieve links from.
+    Returns:
+        list: A list of strings, each representing a hyperlink found on the webpage.
+    Raises:
+        requests.exceptions.HTTPError: If the HTTP request returned an unsuccessful status code.
+    """
+
     # Send an HTTP GET request to the URL
     response = requests.get(url)
     # Check if the request was successful
@@ -27,6 +62,17 @@ def get_all_links(url):
 
 
 def get_unique(url, links):
+    """
+    Generates a list of unique URLs from the given base URL and list of links.
+    This function filters the provided list of links to include only those that
+    end with ".pdf" or ".docs", then joins each link with the base URL and 
+    returns a list of unique URLs.
+    Args:
+        url (str): The base URL to join with each link.
+        links (list): A list of link strings to be filtered and joined with the base URL.
+    Returns:
+        list: A list of unique URLs that end with ".pdf" or ".docs".
+    """
     unique_links = list(
         set([urljoin(url, file) for file in links if (file.endswith(".pdf") or file.endswith(".docs"))])
     )
@@ -34,6 +80,14 @@ def get_unique(url, links):
 
 
 def get_all_pdfs(url, links):
+    """
+    Extracts and returns a list of unique PDF URLs from a list of links.
+    Args:
+        url (str): The base URL to join with the PDF file links.
+        links (list): A list of file links to filter and join with the base URL.
+    Returns:
+        list: A list of unique PDF URLs.
+    """
     pdfs = list(
         set([urljoin(url, file) for file in links if file.endswith(".pdf")])
     )
@@ -41,6 +95,16 @@ def get_all_pdfs(url, links):
 
 
 def get_all_docs(url, links):
+    """
+    Retrieves all unique .docx document URLs from a list of links.
+
+    Args:
+        url (str): The base URL to join with the document links.
+        links (list): A list of links to filter and join with the base URL.
+
+    Returns:
+        list: A list of unique .docx document URLs.
+    """
     docs = list(
         set([urljoin(url, file) for file in links if file.endswith(".docx")])
     )
@@ -48,6 +112,15 @@ def get_all_docs(url, links):
 
 
 def url_to_text(url):
+    """
+    Extracts text content from a given URL pointing to a PDF or DOCX file.
+
+    Args:
+        url (str): The URL of the file to extract text from. The URL should end with either ".pdf" or ".docx".
+
+    Returns:
+        str: The extracted text content from the file. Returns None if the URL does not end with ".pdf" or ".docx".
+    """
     if url.endswith(".pdf"):
         remote_file = urlopen(url).read()
         memory_file = BytesIO(remote_file)
@@ -73,12 +146,31 @@ def is_valid_date(date_string, language):
     """
     Checks if the input string is a valid date in the format "Month Day"
     where the month is a word (e.g., January, February) and the day is a number.
+
+    Args:
+        date_string (str): The date string to validate.
+        language (str): The language of the date string.
+
+    Returns:
+        bool: True if the date string is valid, False otherwise.
     """
     return parse_date_string(date_string, language) is not None
 
 
 def parse_date_string(date_string, language):
-    """Parses a date string into year, month, day."""
+    """
+    Parses a date string into year, month, and day.
+    Args:
+        date_string (str): The date string to parse. It should be in the format "Month Day" 
+                           where "Month" is the full name of the month and "Day" is the day of the month.
+                           Example: "January 15" or "Enero 15".
+        language (str): The language of the date string. Supported values are "es" for Spanish and "en" for English.
+    Returns:
+        tuple: A tuple containing the year (int), month (int), and day (int) if the date string is successfully parsed.
+               Returns None if the date string does not match the expected format or if the language is not supported.
+    Raises:
+        None
+    """
     if language == "es":
         pattern = r"^(Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre)\s+(\d{1,2})$"
     else:
@@ -129,6 +221,17 @@ def parse_date_string(date_string, language):
 
 
 def add_emojis(next_line, language, wnl):
+    """
+    Adds emojis to the given text based on the specified language.
+
+    Args:
+        next_line (str): The input string to which emojis will be added.
+        language (str): The language code for emoji conversion ('es' for Spanish, 'en' for English).
+        wnl (WordNetLemmatizer): An instance of WordNetLemmatizer for lemmatizing words in the input string.
+
+    Returns:
+        str: The input string with emojis added, or None if the language is not supported.
+    """
     next_line_no_colons: str = re.sub(r":", r"", next_line)
     next_line_no_colons_low = next_line_no_colons.lower()
     lemmatized_string = " ".join(
@@ -146,6 +249,21 @@ def add_emojis(next_line, language, wnl):
 
 
 def text_to_ics(text, event_title, language, day_language):
+    """
+    Converts a given text into an ICS calendar format.
+    Args:
+        text (str): The input text containing event details.
+        event_title (str): The title of the event.
+        language (str): The language used for processing text.
+        day_language (str): The language used for parsing dates.
+    Returns:
+        ics.Calendar: A calendar object containing the parsed events.
+    Notes:
+        - The function splits the input text into lines and processes each line to identify valid dates.
+        - For each valid date, an event is created with the specified title and date.
+        - The description of the event is built from subsequent lines until another valid date or specific keywords are encountered.
+        - The event is marked as an all-day event and additional properties are set.
+    """
     # Create WordNetLemmatizer object
     wnl = WordNetLemmatizer()
 
@@ -184,14 +302,34 @@ def text_to_ics(text, event_title, language, day_language):
 
 
 def to_file(ics_string, filename):
-    # Save to file:
+    """
+    Save the given ICS string to a file with the specified filename.
+
+    Args:
+        ics_string (str): The ICS string content to be saved.
+        filename (str): The name of the file where the ICS string will be saved.
+
+    Returns:
+        None
+    """
     if ics_string:
         with open(filename, "w", newline="", encoding="utf-8") as f:
             f.write(ics_string)
         print(filename)
 
 
-def generate_ics(pdf_filename, level, language, day_language, meal):
+def generate_ics(filename, level, language, day_language, meal):
+    """
+    Generates an ICS (iCalendar) file from a PDF menu.
+    Args:
+        filename (str): The filename of the file to be converted.
+        level (str): The school level (e.g., 'k12', 'elementary', 'middle', 'high', 'bic', 'prek').
+        language (str): The language of the menu ('en' for English, 'es' for Spanish).
+        day_language (str): The language of the day names in the calendar.
+        meal (str): The type of meal (e.g., 'breakfast', 'lunch', 'afterschoolsnack', 'snack').
+    Returns:
+        bool: True if the ICS file was generated successfully, False otherwise.
+    """
     meal_terms_en = {
         "breakfast": "Breakfast",
         "lunch": "Lunch",
@@ -230,7 +368,7 @@ def generate_ics(pdf_filename, level, language, day_language, meal):
         outfile = f"spanish_{level}_{meal}.ics"
     else:
         return False
-    link = pdf_filename.replace(" ", "%20")
+    link = filename.replace(" ", "%20")
     # print(link)
     text = url_to_text(link)
     # print(text)
@@ -242,6 +380,27 @@ def generate_ics(pdf_filename, level, language, day_language, meal):
 
 
 def parse_filename(filename):
+    """
+    Parses the given filename to extract information about the level, language, and meal type.
+    Args:
+        filename (str): The name of the file to be parsed.
+    Returns:
+        tuple: A tuple containing three elements:
+            - level (str): The educational level, which can be one of the following:
+                - "k12"
+                - "elementary"
+                - "middle"
+                - "high"
+                - "bic"
+                - "prek"
+            - language (str): The language of the file, either "es" (Spanish) or "en" (English).
+            - meal (str): The type of meal, which can be one of the following:
+                - "breakfast"
+                - "lunch"
+                - "afterschoolsnack"
+                - "snack"
+    Returns False if the filename does not contain the required information or contains "Carb" or "Achievement".
+    """
     if "Carb" in filename:
         return False
     if "Achievement" in filename:
