@@ -11,9 +11,10 @@ import requests
 from bs4 import BeautifulSoup
 from nltk.stem import WordNetLemmatizer
 from pypdf import PdfReader
+import docx
 
 
-def get_all_pdfs(url):
+def get_all_links(url):
     # Send an HTTP GET request to the URL
     response = requests.get(url)
     # Check if the request was successful
@@ -22,20 +23,50 @@ def get_all_pdfs(url):
     soup = BeautifulSoup(response.text, "html.parser")
     # Find all anchor tags and extract the href attribute
     links = [a.get("href") for a in soup.find_all("a", href=True)]
-    pdf_files = list(
+    return links
+
+
+def get_unique(url, links):
+    unique_links = list(
+        set([urljoin(url, file) for file in links if (file.endswith(".pdf") or file.endswith(".docs"))])
+    )
+    return unique_links
+
+
+def get_all_pdfs(url, links):
+    pdfs = list(
         set([urljoin(url, file) for file in links if file.endswith(".pdf")])
     )
-    return pdf_files
+    return pdfs
 
 
-def url_to_text(pdf_url):
-    remote_file = urlopen(pdf_url).read()
-    memory_file = BytesIO(remote_file)
-    reader = PdfReader(memory_file)
-    text = ""
-    for page in reader.pages:
-        text += page.extract_text() + "\n"
-    return text
+def get_all_docs(url, links):
+    docs = list(
+        set([urljoin(url, file) for file in links if file.endswith(".docx")])
+    )
+    return docs
+
+
+def url_to_text(url):
+    if url.endswith(".pdf"):
+        remote_file = urlopen(url).read()
+        memory_file = BytesIO(remote_file)
+        reader = PdfReader(memory_file)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text() + "\n"
+        return text
+    elif url.endswith(".docx"):
+        response = requests.get(url)
+        doc = docx.Document(BytesIO(response.content))
+        text = ''
+        for table in doc.tables:
+            for row in table.rows:
+                for cell in row.cells:
+                    text += cell.text + '\n'
+        return text
+    else:
+        return None
 
 
 def is_valid_date(date_string, language):
@@ -114,20 +145,19 @@ def add_emojis(next_line, language, wnl):
     return next_line_no_colons + only_emoji
 
 
-def text_to_ics(text, event_title, language):
+def text_to_ics(text, event_title, language, day_language):
     # Create WordNetLemmatizer object
     wnl = WordNetLemmatizer()
 
     calendar = ics.Calendar()
     lines = text.split("\n")
-    # print(lines)
     i = 0
     while i < len(lines):
         line = lines[i]
-        if not is_valid_date(line.strip(), language):
+        if not is_valid_date(line.strip(), day_language):
             i += 1
             continue
-        date_parts = parse_date_string(line.strip(), language)
+        date_parts = parse_date_string(line.strip(), day_language)
         year, month, day = date_parts
         event = ics.Event()
         event.name = event_title
@@ -139,7 +169,7 @@ def text_to_ics(text, event_title, language):
         event.description = ""
         while (
             i + 1 < len(lines)
-            and not is_valid_date(lines[i + 1].strip(), language)
+            and not is_valid_date(lines[i + 1].strip(), day_language)
             and "Prices" not in lines[i + 1]
             and "Precios" not in lines[i + 1]
             and "ambios" not in lines[i + 1]
@@ -147,7 +177,6 @@ def text_to_ics(text, event_title, language):
         ):
             next_line = lines[i + 1].strip()
             line = add_emojis(next_line, language, wnl)
-            # print(line)
             event.description += line + "\n"
             i += 1
         calendar.events.add(event)
@@ -159,9 +188,10 @@ def to_file(ics_string, filename):
     if ics_string:
         with open(filename, "w", newline="", encoding="utf-8") as f:
             f.write(ics_string)
+        print(filename)
 
 
-def generate_ics(pdf_filename, level, language, meal):
+def generate_ics(pdf_filename, level, language, day_language, meal):
     meal_terms_en = {
         "breakfast": "Breakfast",
         "lunch": "Lunch",
@@ -204,7 +234,7 @@ def generate_ics(pdf_filename, level, language, meal):
     # print(link)
     text = url_to_text(link)
     # print(text)
-    cal = text_to_ics(text, event_title, language)
+    cal = text_to_ics(text, event_title, language, day_language)
     ics_string = cal.serialize()
     # print(ics_string)
     to_file(ics_string, outfile)
@@ -251,9 +281,29 @@ def parse_filename(filename):
 
 
 if __name__ == "__main__":
-    pdf_files = get_all_pdfs("https://www.dpsnc.net/Page/7089")
+    url = "https://www.dpsnc.net/Page/7089"
+    links = get_all_links(url)
+
+    docs = get_all_docs(url, links)
+    for filepath in docs:
+        params = parse_filename(filepath)
+        if params:
+            (level, language, meal) = params
+            generate_ics(filepath, level, language, language, meal)
+
+    # This code was to fix a menu with a mix of languages
+    # Most content was in Spanish, but the days were labeled in English
+    '''
+    doc_filename = docs[1]
+    print(doc_filename)
+    (level, language, meal) = parse_filename(doc_filename)
+    print(level, language, meal)
+    generate_ics(doc_filename, level, language, 'en', meal)
+    '''
+
+    pdf_files = get_all_pdfs(url, links)
     for filename in pdf_files:
         params = parse_filename(filename)
         if params:
             (level, language, meal) = params
-            generate_ics(filename, level, language, meal)
+            generate_ics(filename, level, language, language, meal)
