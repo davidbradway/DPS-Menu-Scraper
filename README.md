@@ -19,6 +19,8 @@ To (re-)generate calendar menus:
 python pdf_2_ics.py
 ```
 
+The repository has also been set up to run the above script via a Github Actions workflow. It is currently configured to run once a night, for the first 5 days of each month. This creates a ZIP of the created ICS files, which can then be downloaded by the repository owners. It can then be posted as outlined below to the set of Google Calendars maintained by the same folks.
+
 To post events to calendars (if you have write access):
 ```bash
 python gcal.py
