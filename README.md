@@ -10,7 +10,7 @@ pip install -r requirements.txt
 python setup.py
 ```
 
-Set up Google API access as described [here](Google_API.md) and [here](https://developers.google.com/workspace/guides/get-started).
+Set up Google API access as described [here](Google_API.md), [here](https://developers.google.com/workspace/guides/get-started), and [here](https://developers.google.com/calendar/api/quickstart/python).
 
 ## Usage
 
