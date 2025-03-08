@@ -2,13 +2,17 @@
 
 Turn PDFs Lunch menus into Calendars.
 
-## Usage
+## Setup
 
 One-time setup:
 ```bash
 pip install -r requirements.txt
 python setup.py
 ```
+
+Set up Google API access as described [here](Google_API.md) and [here](https://developers.google.com/workspace/guides/get-started).
+
+## Usage
 
 To (re-)generate calendar menus:
 ```bash
