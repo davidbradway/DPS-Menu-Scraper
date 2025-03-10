@@ -17,15 +17,14 @@
 
 ## Configuring Credentials
 1. **Choose the Right Credential Type**:
-   - Our project usese a **OAuth 2.0 Client ID**: For accessing user data with their consent.
-   - **Service Account**: For server-to-server communication or accessing resources on behalf of a user.
+   - Our project uses an **OAuth 2.0 Client ID** for accessing user data with their consent.
    - Create a Desktop app OAuth client ID.
 
 2. **Create Credentials**:
    - Navigate to **"APIs & Services" > "Credentials"** in the Cloud Console.
    - Click **"Create Credentials"** and select the appropriate type (OAuth Client ID).
 
-3. **Set Up OAuth Consent Screen (if using OAuth)**:
+3. **Set Up OAuth Consent Screen**:
    - Navigate to **"OAuth consent screen"** in the Cloud Console.
    - Fill in the required details, such as:
      - **App Name**
@@ -41,4 +40,4 @@
 5. **Integrate Credentials in Your Application
    - The Python script `gcal.py` loads the credentials the first time it is run
    - The credentials are used in web authentication flow via a website to download a token and save it to a JSON file. Make sure this file is in the same working directory.
-   - Then on subsequent runs, until the token expires, the safed `token.json` file is loaded.
+   - Then on subsequent runs, until the token expires, the saved `token.json` file is loaded.
