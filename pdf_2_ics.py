@@ -376,6 +376,7 @@ def generate_ics(filename, level, language, day_language, meal):
     ics_string = cal.serialize()
     # print(ics_string)
     to_file(ics_string, outfile)
+    print(outfile)
     return True
 
 
@@ -444,8 +445,9 @@ if __name__ == "__main__":
     links = get_all_links(url)
 
     docs = get_all_docs(url, links)
-    for filepath in docs:
-        params = parse_filename(filepath)
+    for filename in docs:
+        print(filename)
+        params = parse_filename(filename)
         if params:
             (level, language, meal) = params
             generate_ics(filepath, level, language, language, meal)
@@ -460,8 +462,9 @@ if __name__ == "__main__":
     generate_ics(doc_filename, level, language, 'en', meal)
     '''
 
-    pdf_files = get_all_pdfs(url, links)
-    for filename in pdf_files:
+    pdfs = get_all_pdfs(url, links)
+    for filename in pdf:
+        print(filename)
         params = parse_filename(filename)
         if params:
             (level, language, meal) = params

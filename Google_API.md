@@ -41,3 +41,11 @@
    - The Python script `gcal.py` loads the credentials the first time it is run
    - The credentials are used in web authentication flow via a website to download a token and save it to a JSON file. Make sure this file is in the same working directory.
    - Then on subsequent runs, until the token expires, the saved `token.json` file is loaded.
+
+6. Encrypt keys
+   - Use git bash or a linux box
+   - Use a long passphase
+   - Do not add unencrytped files to repo or push them.
+   - `gpg --symmetric --cipher-algo AES256 credentials.json`
+   - `gpg --symmetric --cipher-algo AES256 token.json`
+   - Set up Github Action to use keys: https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions

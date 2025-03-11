@@ -7,6 +7,9 @@ on:
     - cron: '30 5 3 * *'  # the third day of every month at 5:30 UTC
     - cron: '30 5 4 * *'  # the fourth day of every month at 5:30 UTC
     - cron: '30 5 5 * *'  # the fifth day of every month at 5:30 UTC
+    - cron: '30 5 11 * *'
+    - cron: '30 5 12 * *'
+    - cron: '30 5 13 * *'
 
 jobs:
   create_ics:
@@ -34,3 +37,11 @@ jobs:
       with:
         name: calendars
         path: ./*.ics
+
+    - name: Decrypt large secret
+      run: |
+        ./decrypt_secret.sh
+        python testenvvar.py
+        python gcal.py
+      env:
+        LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
