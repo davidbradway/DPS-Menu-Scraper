@@ -211,6 +211,7 @@ def process_zip(menu_ids, service, zip_filepath):
         for file_info in zip_ref.infolist():
             filename = file_info.filename
             if filename in menu_ids and menu_ids[filename] != '':
+                print(filename)
                 with zip_ref.open(file_info) as file:
                     content = file.read().decode('utf-8') # Decode assuming UTF-8
                     process_content(menu_ids, service, filename, content)
@@ -231,6 +232,7 @@ def process_dir(menu_ids, service):
     dirlist = list(filter(lambda x: x.endswith('.ics'), os.listdir()))
     for filename in dirlist:
         if filename in menu_ids and menu_ids[filename] != '':
+            print(filename)
             with open(filename, 'r', encoding='utf-8') as file:
                 content = file.read()
                 process_content(menu_ids, service, filename, content)
