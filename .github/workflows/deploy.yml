@@ -42,5 +42,6 @@ jobs:
       run: |
         ./decrypt_secret.sh
         python testenvvar.py
+        python gcal.py
       env:
         LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}

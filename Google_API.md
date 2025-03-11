@@ -48,3 +48,4 @@
    - Do not add unencrytped files to repo or push them.
    - `gpg --symmetric --cipher-algo AES256 credentials.json`
    - `gpg --symmetric --cipher-algo AES256 token.json`
+   - Set up Github Action to use keys: https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions
