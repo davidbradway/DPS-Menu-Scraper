@@ -463,7 +463,7 @@ if __name__ == "__main__":
     '''
 
     pdfs = get_all_pdfs(url, links)
-    for filename in pdf:
+    for filename in pdfs:
         print(filename)
         params = parse_filename(filename)
         if params:
