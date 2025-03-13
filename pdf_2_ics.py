@@ -449,7 +449,7 @@ if __name__ == "__main__":
         if params:
             print(filename)
             (level, language, meal) = params
-            generate_ics(filepath, level, language, language, meal)
+            generate_ics(filename, level, language, language, meal)
 
     # This code was to fix a menu with a mix of languages
     # Most content was in Spanish, but the days were labeled in English
