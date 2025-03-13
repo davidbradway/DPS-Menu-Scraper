@@ -315,7 +315,6 @@ def to_file(ics_string, filename):
     if ics_string:
         with open(filename, "w", newline="", encoding="utf-8") as f:
             f.write(ics_string)
-        print(filename)
 
 
 def generate_ics(filename, level, language, day_language, meal):
@@ -446,9 +445,9 @@ if __name__ == "__main__":
 
     docs = get_all_docs(url, links)
     for filename in docs:
-        print(filename)
         params = parse_filename(filename)
         if params:
+            print(filename)
             (level, language, meal) = params
             generate_ics(filepath, level, language, language, meal)
 
@@ -464,8 +463,8 @@ if __name__ == "__main__":
 
     pdfs = get_all_pdfs(url, links)
     for filename in pdfs:
-        print(filename)
         params = parse_filename(filename)
         if params:
+            print(filename)
             (level, language, meal) = params
             generate_ics(filename, level, language, language, meal)
