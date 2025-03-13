@@ -1,15 +1,12 @@
 name: deploy
 
 on:
+  push:
   schedule:
     - cron: '30 5 1 * *'  # the first day of every month at 5:30 UTC
     - cron: '30 5 2 * *'  # the second day of every month at 5:30 UTC
     - cron: '30 5 3 * *'  # the third day of every month at 5:30 UTC
     - cron: '30 5 4 * *'  # the fourth day of every month at 5:30 UTC
-    - cron: '30 5 5 * *'  # the fifth day of every month at 5:30 UTC
-    - cron: '30 5 13 * *'
-    - cron: '30 5 14 * *'
-    - cron: '30 5 15 * *'
 
 jobs:
   create_ics:
