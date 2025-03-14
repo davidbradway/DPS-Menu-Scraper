@@ -27,7 +27,7 @@ from datetime import datetime, timezone
 from io import BytesIO
 from urllib.parse import urljoin
 from urllib.request import urlopen
-
+import json
 import emoji
 import ics
 import requests
@@ -443,28 +443,41 @@ if __name__ == "__main__":
     url = "https://www.dpsnc.net/Page/7089"
     links = get_all_links(url)
 
-    docs = get_all_docs(url, links)
-    for filename in docs:
-        params = parse_filename(filename)
-        if params:
-            print(filename)
-            (level, language, meal) = params
-            generate_ics(filename, level, language, language, meal)
+    # load the old links to avoid processing the same link twice
+    with open("old_links.json", "r") as f:
+        old_links = json.load(f)
 
-    # This code was to fix a menu with a mix of languages
-    # Most content was in Spanish, but the days were labeled in English
-    '''
-    doc_filename = docs[1]
-    print(doc_filename)
-    (level, language, meal) = parse_filename(doc_filename)
-    print(level, language, meal)
-    generate_ics(doc_filename, level, language, 'en', meal)
-    '''
+    new_links = [link for link in links if link not in old_links]
+    # do not process the same link twice
+    if new_links:
+        docs = get_all_docs(url, new_links)
+        for filename in docs:
+            params = parse_filename(filename)
+            if params:
+                print(filename)
+                (level, language, meal) = params
+                generate_ics(filename, level, language, language, meal)
 
-    pdfs = get_all_pdfs(url, links)
-    for filename in pdfs:
-        params = parse_filename(filename)
-        if params:
-            print(filename)
-            (level, language, meal) = params
-            generate_ics(filename, level, language, language, meal)
+        # This code was to fix a menu with a mix of languages
+        # Most content was in Spanish, but the days were labeled in English
+        '''
+        doc_filename = docs[1]
+        print(doc_filename)
+        (level, language, meal) = parse_filename(doc_filename)
+        print(level, language, meal)
+        generate_ics(doc_filename, level, language, 'en', meal)
+        '''
+
+        pdfs = get_all_pdfs(url, new_links)
+        for filename in pdfs:
+            params = parse_filename(filename)
+            if params:
+                print(filename)
+                (level, language, meal) = params
+                generate_ics(filename, level, language, language, meal)
+
+        all_links = links.extend(new_links)
+        with open("old_links.json", "w") as f:
+            json.dump(all_links, f)
+    else:
+        print('No new links to process')
