@@ -13,16 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out the repository
-      uses: actions/checkout@v3
-    
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v3
+      uses: actions/checkout@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.11.11
-        
+        cache: 'pip' # caching pip dependencies
+      run: pip install -r requirements.txt
+
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt
         python setup.py
 
     - name: Build ics files
@@ -34,6 +33,12 @@ jobs:
       with:
         name: calendars
         path: ./*.ics
+
+    - name: Publish files 2
+      uses: actions/upload-artifact@v4
+      with:
+        name: old_links
+        path: ./old_links.json
 
     - name: Decrypt large secret
       run: |
