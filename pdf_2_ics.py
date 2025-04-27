@@ -39,25 +39,32 @@ import docx
 
 def get_all_links(url):
     """
-    Retrieve all hyperlinks from a given URL.
-    This function sends an HTTP GET request to the specified URL, parses the HTML content,
-    and extracts all hyperlinks (anchor tags with href attributes).
+    Extracts all links containing "amazonaws.com" from a JSON object embedded 
+    within a script tag of type 'application/json' in the HTML content of a given URL.
     Args:
-        url (str): The URL of the webpage to retrieve links from.
+        url (str): The URL of the webpage to scrape for links.
     Returns:
-        list: A list of strings, each representing a hyperlink found on the webpage.
+        list: A list of strings containing links that include "amazonaws.com".
     Raises:
-        requests.exceptions.HTTPError: If the HTTP request returned an unsuccessful status code.
+        requests.exceptions.RequestException: If the HTTP request fails.
+        requests.exceptions.HTTPError: If the HTTP response contains an error status code.
+        AttributeError: If the expected script tag or JSON content is not found.
+        json.JSONDecodeError: If the JSON content cannot be parsed.
     """
-
     # Send an HTTP GET request to the URL
     response = requests.get(url)
     # Check if the request was successful
     response.raise_for_status()
     # Parse the HTML content
     soup = BeautifulSoup(response.text, "html.parser")
-    # Find all anchor tags and extract the href attribute
-    links = [a.get("href") for a in soup.find_all("a", href=True)]
+    # Find script tag with type 'application/json'
+    script_tag = soup.find('script', type='application/json')
+    # Get script tag content
+    json_string = script_tag.string
+    # Load JSON data
+    data = json.loads(json_string)
+    # Extract links from the JSON data list
+    links = [a for a in data if type(a) == str and "amazonaws.com" in a]
     return links
 
 
@@ -440,7 +447,8 @@ def parse_filename(filename):
 
 
 if __name__ == "__main__":
-    url = "https://www.dpsnc.net/Page/7089"
+    # Spanish menus
+    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/menús-2024-25---spanish/736908"
     links = get_all_links(url)
 
     # load the old links to avoid processing the same link twice
@@ -476,8 +484,51 @@ if __name__ == "__main__":
                 (level, language, meal) = params
                 generate_ics(filename, level, language, language, meal)
 
-        all_links = links.extend(new_links)
+        old_links.extend(new_links)
         with open("old_links.json", "w") as f:
-            json.dump(all_links, f)
+            json.dump(old_links, f)
+    else:
+        print('No new links to process')
+
+    # English menus
+    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/2024-25-menus---english/736910"
+    links = get_all_links(url)
+
+    # load the old links to avoid processing the same link twice
+    with open("old_links.json", "r") as f:
+        old_links = json.load(f)
+
+    new_links = [link for link in links if link not in old_links]
+    # do not process the same link twice
+    if new_links:
+        docs = get_all_docs(url, new_links)
+        for filename in docs:
+            params = parse_filename(filename)
+            if params:
+                print(filename)
+                (level, language, meal) = params
+                generate_ics(filename, level, language, language, meal)
+
+        # This code was to fix a menu with a mix of languages
+        # Most content was in Spanish, but the days were labeled in English
+        '''
+        doc_filename = docs[1]
+        print(doc_filename)
+        (level, language, meal) = parse_filename(doc_filename)
+        print(level, language, meal)
+        generate_ics(doc_filename, level, language, 'en', meal)
+        '''
+
+        pdfs = get_all_pdfs(url, new_links)
+        for filename in pdfs:
+            params = parse_filename(filename)
+            if params:
+                print(filename)
+                (level, language, meal) = params
+                generate_ics(filename, level, language, language, meal)
+
+        old_links.extend(new_links)
+        with open("old_links.json", "w") as f:
+            json.dump(old_links, f)
     else:
         print('No new links to process')
