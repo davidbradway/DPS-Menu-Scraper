@@ -415,32 +415,66 @@ def parse_filename(filename):
 
     if "K12" in filename:
         level = "k12"
+    elif "K-12" in filename:
+        level = "k12"
     elif "ES" in filename:
+        level = "elementary"
+    elif "Elementary" in filename:
         level = "elementary"
     elif "MS" in filename:
         level = "middle"
+    elif "Middle" in filename:
+        level = "middle"
     elif "HS" in filename:
+        level = "high"
+    elif "High" in filename:
         level = "high"
     elif "BIC" in filename:
         level = "bic"
+    elif "Classroom" in filename:
+        level = "bic"
+    elif "After" in filename:
+        level = "k12"
+    elif "Aula" in filename:
+        level = "bic"
     elif "PreK" in filename:
         level = "prek"
+    elif "Pre-K" in filename:
+        level = "prek"
+    elif "Prek" in filename:
+        level = "prek"
+    elif "Breakfast" in filename:
+        level = "k12"
     else:
         return False
 
-    if "Spanish" in filename:
-        language = "es"
-    else:
-        language = "en"
-
     if "Breakfast" in filename:
         meal = "breakfast"
+        language = "en"
+    elif "Desayunos" in filename:
+        meal = "breakfast"
+        language = "es"
     elif "Lunch" in filename:
         meal = "lunch"
+        language = "en"
+    elif "Almuerzo" in filename:
+        meal = "lunch"
+        language = "es"
     elif "ASSP" in filename:
         meal = "afterschoolsnack"
+        language = "en"
+    elif "After" in filename:
+        meal = "afterschoolsnack"
+        language = "en"
+    elif "Despu" in filename:
+        meal = "afterschoolsnack"
+        language = "es"
     elif "Snack" in filename:
         meal = "snack"
+        language = "en"
+    elif "Meriendas" in filename:
+        meal = "snack"
+        language = "es"
     else:
         return False
     return (level, language, meal)
