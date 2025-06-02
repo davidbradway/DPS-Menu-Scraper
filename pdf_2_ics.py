@@ -477,6 +477,10 @@ def parse_filename(filename):
         language = "es"
     else:
         return False
+
+    if "Spanish" in filename:
+        language = "es"
+
     return (level, language, meal)
 
 
