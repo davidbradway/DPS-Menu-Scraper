@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPS Menu Scraper</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>DPS Menu Scraper</h1>
+        <p>Turn PDFs Lunch menus into Calendars.</p>
+
+        <h2>Setup</h2>
+        <p>One-time setup:</p>
+        <pre><code>pip install -r requirements.txt
+python setup.py</code></pre>
+        <p>Set up Google API access as described <a href="Google_API.md">here</a>, <a href="https://developers.google.com/workspace/guides/get-started">here</a>, and <a href="https://developers.google.com/calendar/api/quickstart/python">here</a>.</p>
+
+        <h2>Usage</h2>
+        <p>To (re-)generate calendar menus:</p>
+        <pre><code>python pdf_2_ics.py</code></pre>
+        <p>The repository has also been set up to run the above script via a Github Actions workflow. It is currently configured to run once a night, for the first 5 days of each month. This creates a ZIP of the created ICS files, which can then be downloaded by the repository owners. It can then be posted as outlined below to the set of Google Calendars maintained by the same folks.</p>
+        <p>To post events to calendars (if you have write access):</p>
+        <pre><code>python gcal.py</code></pre>
+
+        <h2>Critical Acclaim</h2>
+        <blockquote>
+            <p>“Gods!! This calendar link is amazing! Thank you sooooooo much!!”</p>
+            <p>“Thank you!! Super helpful, much appreciated!!”</p>
+            <p>“David, this is seriously the best email I’ve ever gotten!!! Thank you so much, looking up the menu everyday was so annoying, and my only old-guy solution was printing it onto paper 😂 … AMAZING!”</p>
+            <p>“This is amazing, David. My kiddo will not eat at school anymore (infuriating) but I know a lot of people will truly get a lot out of this. And right now, using our superpowers for the greater good is all we got! And it is extra important. Thanks“</p>
+            <p>“You sir are the man! Well done!”</p>
+            <p>“Incredible”</p>
+            <p>“Not all hoagies wear capes. Thanks David!”</p>
+            <p>“Thanks David! …  I've heard from a lot of folks that the menu situation is annoying. So definitely it would be valuable to host on <a href="http://ekpowe.org">ekpowe.org</a> for families as well.“</p>
+            <p>“Works great!!! Thanks!”</p>
+            <p>“This is awesome. Thanks!”</p>
+            <p>“Those are serious superpowers, David! awesome!”</p>
+            <p>“This is fantastic! My son asks about the menu every morning and I love having it on my calendar.”</p>
+        </blockquote>
+
+        <h2>Get the calendars!</h2>
+        <div id="calendars"></div>
+
+        <h2>References</h2>
+        <div id="references"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

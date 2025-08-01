@@ -78,10 +78,10 @@ def get_unique(url, links):
         url (str): The base URL to join with each link.
         links (list): A list of link strings to be filtered and joined with the base URL.
     Returns:
-        list: A list of unique URLs that end with ".pdf" or ".docs".
+        list: A list of unique URLs that end with ".pdf" or ".docx".
     """
     unique_links = list(
-        set([urljoin(url, file) for file in links if (file.endswith(".pdf") or file.endswith(".docs"))])
+        set([urljoin(url, file) for file in links if (file.endswith(".pdf") or file.endswith(".docx"))])
     )
     return unique_links
 
@@ -479,6 +479,10 @@ def parse_filename(filename):
         language = "es"
     else:
         return False
+
+    if "Spanish" in filename:
+        language = "es"
+
     return (level, language, meal)
 
 
