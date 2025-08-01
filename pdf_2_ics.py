@@ -64,7 +64,7 @@ def get_all_links(url):
     # Load JSON data
     data = json.loads(json_string)
     # Extract links from the JSON data list
-    links = [a for a in data if type(a) == str and "amazonaws.com" in a]
+    links = [a for a in data if type(a) == str and "uploaded_file" in a]
     return links
 
 
@@ -96,7 +96,7 @@ def get_all_pdfs(url, links):
         list: A list of unique PDF URLs.
     """
     pdfs = list(
-        set([urljoin(url, file) for file in links if file.endswith(".pdf")])
+        set([urljoin(url, file) for file in links if ".pdf" in file])
     )
     return pdfs
 
@@ -113,7 +113,7 @@ def get_all_docs(url, links):
         list: A list of unique .docx document URLs.
     """
     docs = list(
-        set([urljoin(url, file) for file in links if file.endswith(".docx")])
+        set([file for file in links if ".docx" in file])
     )
     return docs
 
@@ -375,6 +375,7 @@ def generate_ics(filename, level, language, day_language, meal):
     else:
         return False
     link = filename.replace(" ", "%20")
+    link = link.replace("?disposition=inline", "")
     # print(link)
     text = url_to_text(link)
     # print(text)
@@ -413,6 +414,11 @@ def parse_filename(filename):
     if "Achievement" in filename:
         return False
 
+    if "Spanish" in filename:
+        language = "es"
+    else:
+        language = "en"
+    
     if "K12" in filename:
         level = "k12"
     elif "K-12" in filename:
@@ -450,13 +456,11 @@ def parse_filename(filename):
 
     if "Breakfast" in filename:
         meal = "breakfast"
-        language = "en"
     elif "Desayunos" in filename:
         meal = "breakfast"
         language = "es"
     elif "Lunch" in filename:
         meal = "lunch"
-        language = "en"
     elif "Almuerzo" in filename:
         meal = "lunch"
         language = "es"
@@ -465,13 +469,11 @@ def parse_filename(filename):
         language = "en"
     elif "After" in filename:
         meal = "afterschoolsnack"
-        language = "en"
     elif "Despu" in filename:
         meal = "afterschoolsnack"
         language = "es"
     elif "Snack" in filename:
         meal = "snack"
-        language = "en"
     elif "Meriendas" in filename:
         meal = "snack"
         language = "es"
@@ -482,7 +484,7 @@ def parse_filename(filename):
 
 if __name__ == "__main__":
     # Spanish menus
-    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/menús-2024-25---spanish/736908"
+    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/men%C3%BAs-2024-2025---spanish/736908"
     links = get_all_links(url)
 
     # load the old links to avoid processing the same link twice
@@ -525,7 +527,7 @@ if __name__ == "__main__":
         print('No new links to process')
 
     # English menus
-    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/2024-25-menus---english/736910"
+    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/2024-2025-menus---english/736910"
     links = get_all_links(url)
 
     # load the old links to avoid processing the same link twice
@@ -542,16 +544,6 @@ if __name__ == "__main__":
                 print(filename)
                 (level, language, meal) = params
                 generate_ics(filename, level, language, language, meal)
-
-        # This code was to fix a menu with a mix of languages
-        # Most content was in Spanish, but the days were labeled in English
-        '''
-        doc_filename = docs[1]
-        print(doc_filename)
-        (level, language, meal) = parse_filename(doc_filename)
-        print(level, language, meal)
-        generate_ics(doc_filename, level, language, 'en', meal)
-        '''
 
         pdfs = get_all_pdfs(url, new_links)
         for filename in pdfs:
