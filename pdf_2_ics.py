@@ -488,7 +488,7 @@ def parse_filename(filename):
 
 if __name__ == "__main__":
     # Spanish menus
-    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/men%C3%BAs-2024-2025---spanish/736908"
+    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/men%C3%BAs-2025-2026---spanish/march-2026/25822543"
     links = get_all_links(url)
 
     # load the old links to avoid processing the same link twice
@@ -531,7 +531,8 @@ if __name__ == "__main__":
         print('No new links to process')
 
     # English menus
-    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/2024-2025-menus---english/736910"
+    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/2025-2026-menus---english/march-2026/25821405"
+
     links = get_all_links(url)
 
     # load the old links to avoid processing the same link twice
