@@ -22,6 +22,7 @@ import pytz
 
 from ics import Calendar
 
+import google.auth
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -48,6 +49,11 @@ def authenticate():
     Raises:
         google.auth.exceptions.GoogleAuthError: If there is an error during the authentication process.
     """
+    # In CI, use Application Default Credentials set by google-github-actions/auth.
+    if os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
+        creds, _ = google.auth.default(scopes=SCOPES)
+        return creds
+
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when authorization flow completes
