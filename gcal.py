@@ -53,11 +53,22 @@ def authenticate():
     # created automatically when authorization flow completes
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+        if creds.expiry:
+            expiry_local = creds.expiry.replace(tzinfo=timezone.utc).astimezone()
+            print(f"Token expiry: {expiry_local.strftime('%Y-%m-%d %H:%M:%S %Z')}")
+            if creds.expired:
+                print("Warning: token is expired.")
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
+            try:
+                creds.refresh(Request())
+                print("Token refreshed successfully.")
+            except Exception as e:
+                print(f"Token refresh failed: {e}")
+                print("Re-running the OAuth flow to obtain new credentials.")
+                creds = None
+        if not creds:
             flow = InstalledAppFlow.from_client_secrets_file(
                 "credentials.json", SCOPES
             )
