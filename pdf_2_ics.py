@@ -427,15 +427,23 @@ def parse_filename(filename):
         level = "elementary"
     elif "Elementary" in filename:
         level = "elementary"
+    elif "Primaria" in filename:
+        level = "elementary"
     elif "MS" in filename:
+        level = "middle"
+    elif "Intermedia" in filename:
         level = "middle"
     elif "Middle" in filename:
         level = "middle"
     elif "HS" in filename:
         level = "high"
+    elif "Secundaria" in filename:
+        level = "high"
     elif "High" in filename:
         level = "high"
     elif "BIC" in filename:
+        level = "bic"
+    elif "Aula" in filename:
         level = "bic"
     elif "Classroom" in filename:
         level = "bic"
@@ -456,12 +464,15 @@ def parse_filename(filename):
 
     if "Breakfast" in filename:
         meal = "breakfast"
-    elif "Desayunos" in filename:
+    elif "Desayuno" in filename:
         meal = "breakfast"
         language = "es"
     elif "Lunch" in filename:
         meal = "lunch"
     elif "Almuerzo" in filename:
+        meal = "lunch"
+        language = "es"
+    elif "Escuela-Primaria" in filename:
         meal = "lunch"
         language = "es"
     elif "ASSP" in filename:
@@ -474,7 +485,7 @@ def parse_filename(filename):
         language = "es"
     elif "Snack" in filename:
         meal = "snack"
-    elif "Meriendas" in filename:
+    elif "Merienda" in filename:
         meal = "snack"
         language = "es"
     else:
