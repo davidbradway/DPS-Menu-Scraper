@@ -400,7 +400,8 @@ def get_latest_month_url(parent_url):
         "July", "August", "September", "October", "November", "December",
     ]
     month_pattern = re.compile(
-        r"^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})$"
+        r"^(January|February|March|April|May|June|July|August|September|October|November|December)"
+        r"(?:\s+\d{1,2}(?:\s*-\s*\d{1,2})?,)?\s+(\d{4})(?:\s*-\s*\w+)?$"
     )
     response = requests.get(parent_url)
     response.raise_for_status()
