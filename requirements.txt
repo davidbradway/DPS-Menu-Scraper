@@ -1,5 +1,6 @@
 pypdf
 ics
+tatsu<5.8
 pytz
 emoji
 nltk

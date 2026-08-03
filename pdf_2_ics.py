@@ -56,7 +56,7 @@ def get_all_links(url):
     # Check if the request was successful
     response.raise_for_status()
     # Parse the HTML content
-    soup = BeautifulSoup(response.text, "html.parser")
+    soup = BeautifulSoup(response.text, "lxml")
     # Find script tag with type 'application/json'
     script_tag = soup.find('script', type='application/json')
     # Get script tag content
@@ -387,6 +387,48 @@ def generate_ics(filename, level, language, day_language, meal):
     return True
 
 
+def get_latest_month_url(parent_url):
+    """
+    Finds the URL for the most recent monthly menu folder under a parent page.
+    Args:
+        parent_url (str): The URL of the parent documents page.
+    Returns:
+        str: The full URL of the latest month's folder, or None if not found.
+    """
+    month_names = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December",
+    ]
+    month_pattern = re.compile(
+        r"^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})$"
+    )
+    response = requests.get(parent_url)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, "lxml")
+    script_tag = soup.find("script", type="application/json")
+    data = json.loads(script_tag.string)  # type: ignore[union-attr]
+
+    month_urls = {}
+    for item in data:
+        if not isinstance(item, dict):
+            continue
+        if not ("folder_name" in item and "url" in item and "isFolder" in item):
+            continue
+        if not data[item["isFolder"]]:
+            continue
+        folder_name = data[item["folder_name"]]
+        url_path = data[item["url"]]
+        m = month_pattern.match(folder_name)
+        if m:
+            month_num = month_names.index(m.group(1)) + 1
+            year = int(m.group(2))
+            month_urls[(year, month_num)] = "https://www.dpsnc.net" + url_path
+
+    if not month_urls:
+        return None
+    return month_urls[max(month_urls)]
+
+
 def parse_filename(filename):
     """
     Parses the given filename to extract information about the level, language, and meal type.
@@ -427,15 +469,23 @@ def parse_filename(filename):
         level = "elementary"
     elif "Elementary" in filename:
         level = "elementary"
+    elif "Primaria" in filename:
+        level = "elementary"
     elif "MS" in filename:
+        level = "middle"
+    elif "Intermedia" in filename:
         level = "middle"
     elif "Middle" in filename:
         level = "middle"
     elif "HS" in filename:
         level = "high"
+    elif "Secundaria" in filename:
+        level = "high"
     elif "High" in filename:
         level = "high"
     elif "BIC" in filename:
+        level = "bic"
+    elif "Aula" in filename:
         level = "bic"
     elif "Classroom" in filename:
         level = "bic"
@@ -456,12 +506,15 @@ def parse_filename(filename):
 
     if "Breakfast" in filename:
         meal = "breakfast"
-    elif "Desayunos" in filename:
+    elif "Desayuno" in filename:
         meal = "breakfast"
         language = "es"
     elif "Lunch" in filename:
         meal = "lunch"
     elif "Almuerzo" in filename:
+        meal = "lunch"
+        language = "es"
+    elif "Escuela-Primaria" in filename:
         meal = "lunch"
         language = "es"
     elif "ASSP" in filename:
@@ -474,7 +527,7 @@ def parse_filename(filename):
         language = "es"
     elif "Snack" in filename:
         meal = "snack"
-    elif "Meriendas" in filename:
+    elif "Merienda" in filename:
         meal = "snack"
         language = "es"
     else:
@@ -487,8 +540,14 @@ def parse_filename(filename):
 
 
 if __name__ == "__main__":
+    # Parent pages for 2025-2026 school year (update IDs next school year from
+    # https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/16304877)
+    SPANISH_PARENT = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/men%C3%BAs-2025-2026---spanish/16304885"
+    ENGLISH_PARENT = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/2025-2026-menus---english/736910"
+
     # Spanish menus
-    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/men%C3%BAs-2025-2026---spanish/august-3---21%2C-2026---spanish/28442042"
+    url = get_latest_month_url(SPANISH_PARENT)
+    print(f"Spanish: {url}")
     links = get_all_links(url)
 
     # load the old links to avoid processing the same link twice
@@ -531,7 +590,8 @@ if __name__ == "__main__":
         print('No new links to process')
 
     # English menus
-    url = "https://www.dpsnc.net/documents/departments/school-nutrition-services/menus/2025-2026-menus---english/august-3---21%2C--2026/28442020"
+    url = get_latest_month_url(ENGLISH_PARENT)
+    print(f"English: {url}")
 
     links = get_all_links(url)
 
