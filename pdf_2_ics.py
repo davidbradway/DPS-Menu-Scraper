@@ -399,9 +399,11 @@ def get_latest_month_url(parent_url):
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December",
     ]
+    month_names_alt = "|".join(month_names)
     month_pattern = re.compile(
-        r"^(January|February|March|April|May|June|July|August|September|October|November|December)"
-        r"(?:\s+\d{1,2}(?:\s*-\s*\d{1,2})?,)?\s+(\d{4})(?:\s*-\s*\w+)?$"
+        rf"^({month_names_alt})"
+        rf"(?:\s+(\d{{1,2}})(?:\s*-\s*(?:{month_names_alt})?\s*\d{{1,2}})?,)?"
+        r"\s+(\d{4})(?:\s*-\s*\w+)?$"
     )
     response = requests.get(parent_url)
     response.raise_for_status()
@@ -422,8 +424,9 @@ def get_latest_month_url(parent_url):
         m = month_pattern.match(folder_name)
         if m:
             month_num = month_names.index(m.group(1)) + 1
-            year = int(m.group(2))
-            month_urls[(year, month_num)] = "https://www.dpsnc.net" + url_path
+            day = int(m.group(2)) if m.group(2) else 0
+            year = int(m.group(3))
+            month_urls[(year, month_num, day)] = "https://www.dpsnc.net" + url_path
 
     if not month_urls:
         return None
