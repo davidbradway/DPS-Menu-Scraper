@@ -256,7 +256,11 @@ def process_dir(menu_ids, service):
 
 
 if __name__ == "__main__":
-    (menu_ids, service) = load_resources()
+    resources = load_resources()
+    if resources is None:
+        raise FileNotFoundError("menu_ids.json was not found")
+
+    menu_ids, service = resources
     zip_filepath = "calendars.zip"
     if os.path.exists(zip_filepath):
         process_zip(menu_ids, service, zip_filepath)
