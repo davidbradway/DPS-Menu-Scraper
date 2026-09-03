@@ -1,5 +1,7 @@
 # DPS Menu Scraper
 
+If you just need the calendars, not the code, scroll down...
+
 Turn PDFs Lunch menus into Calendars.
 
 ## Setup
