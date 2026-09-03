@@ -395,15 +395,25 @@ def get_latest_month_url(parent_url):
     Returns:
         str: The full URL of the latest month's folder, or None if not found.
     """
-    month_names = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December",
-    ]
-    month_names_alt = "|".join(month_names)
+    month_numbers = {
+        "January": 1, "Enero": 1,
+        "February": 2, "Febrero": 2,
+        "March": 3, "Marzo": 3,
+        "April": 4, "Abril": 4,
+        "May": 5, "Mayo": 5,
+        "June": 6, "Junio": 6,
+        "July": 7, "Julio": 7,
+        "August": 8, "Agosto": 8,
+        "September": 9, "Septiembre": 9,
+        "October": 10, "Octubre": 10,
+        "November": 11, "Noviembre": 11,
+        "December": 12, "Diciembre": 12,
+    }
+    month_names_alt = "|".join(month_numbers)
     month_pattern = re.compile(
         rf"^({month_names_alt})"
         rf"(?:\s+(\d{{1,2}})(?:\s*-\s*(?:{month_names_alt})?\s*\d{{1,2}})?,)?"
-        r"\s+(\d{4})(?:\s*-\s*\w+)?$"
+        r"\s+(\d{4})(?:\s*-\s*.+)?$"
     )
     response = requests.get(parent_url)
     response.raise_for_status()
@@ -419,11 +429,11 @@ def get_latest_month_url(parent_url):
             continue
         if not data[item["isFolder"]]:
             continue
-        folder_name = data[item["folder_name"]]
+        folder_name = data[item["folder_name"]].strip()
         url_path = data[item["url"]]
         m = month_pattern.match(folder_name)
         if m:
-            month_num = month_names.index(m.group(1)) + 1
+            month_num = month_numbers[m.group(1)]
             day = int(m.group(2)) if m.group(2) else 0
             year = int(m.group(3))
             month_urls[(year, month_num, day)] = "https://www.dpsnc.net" + url_path
